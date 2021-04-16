@@ -1,0 +1,24 @@
+spark:
+  app_name: lassy_stream
+  master: local[*]
+  log_level: WARN
+  kafka_jar: org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0
+
+stream:
+  source_kafka_topic: legacy.shippinglabel.tracker.update
+  sink_dir: file:///home/guido.kosloffgancedo/spark-structured-streaming-demo/dest
+  checkpoint_dir: file:///home/guido.kosloffgancedo/spark-structured-streaming-demo/checkpoint
+  trigger_processing_time: "10 seconds"
+  output_mode: append
+  nr_partitions_per_batch: 1
+
+kafka:
+  kafka.bootstrap.servers: kafka-staging-hellofresh.aivencloud.com:23408
+  startingOffsets: earliest
+  kafka.group.id: test_gkg_consumer_group
+  kafka.security.protocol: SSL
+  kafka.ssl.truststore.location: /home/guido.kosloffgancedo/spark-structured-streaming-demo/lassystream/conf/kafka.aiven.client.staging.truststore.jks
+  kafka.ssl.truststore.password: XXXXXXXX
+  kafka.ssl.keystore.location: /home/guido.kosloffgancedo/spark-structured-streaming-demo/lassystream/conf/kafka.aiven.client.staging.keystore.p12
+  kafka.ssl.keystore.password: XXXXXXXX
+  kafka.ssl.key.password: XXXXXXXX
