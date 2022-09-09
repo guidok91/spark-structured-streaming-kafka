@@ -3,7 +3,7 @@ from configparser import ConfigParser
 
 from pyspark.sql.session import SparkSession
 
-from spark_structured_streaming_demo.movie_ratings_stream import MovieRatingsStream
+from movie_ratings_streaming.stream import MovieRatingsStream
 
 CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
 

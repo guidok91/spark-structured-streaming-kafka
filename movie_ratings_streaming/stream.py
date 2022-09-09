@@ -4,7 +4,7 @@ from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.session import SparkSession
 
-from spark_structured_streaming_demo.schema import MOVIE_RATINGS_SOURCE_SCHEMA
+from movie_ratings_streaming.schema import MOVIE_RATINGS_SOURCE_SCHEMA
 
 
 class MovieRatingsStream:
