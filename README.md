@@ -21,7 +21,7 @@ Run the following commands in order:
 Check the output dataset:
 
 ```python
-$ python -m venv .venv
+$ source .venv/bin/activate
 $ pyspark
 >>> df = spark.read.parquet("data_lake/sink")
 >>> df.show()                                                                   

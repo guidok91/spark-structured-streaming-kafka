@@ -40,5 +40,5 @@ streaming-app-run:
 	source .venv/bin/activate && \
 	spark-submit \
 	--master local[*] \
-	--conf spark.jars.packages=org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 \
 	spark_structured_streaming_demo/entrypoint.py
