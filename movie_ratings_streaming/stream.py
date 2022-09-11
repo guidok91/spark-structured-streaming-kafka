@@ -1,15 +1,19 @@
 import logging
 
+from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import col, from_json
+from pyspark.sql.functions import col
 from pyspark.sql.session import SparkSession
-
-from movie_ratings_streaming.schema import MOVIE_RATINGS_SOURCE_SCHEMA
 
 
 class MovieRatingsStream:
-    def __init__(self, config: dict, spark_session: SparkSession) -> None:
+    """Reads streaming data from a Kafka topic, applies transformation and saves to a Parquet file sink."""
+
+    def __init__(
+        self, config: dict, source_avro_schema: str, spark_session: SparkSession
+    ) -> None:
         self._config = config
+        self._source_avro_schema = source_avro_schema
         self._spark_session = spark_session
 
     def run(self) -> None:
@@ -32,18 +36,33 @@ class MovieRatingsStream:
 
         return self._extract_payload(df_raw)
 
-    @staticmethod
-    def _extract_payload(df: DataFrame) -> DataFrame:
+    def _extract_payload(self, df: DataFrame) -> DataFrame:
+        """Deserializes topic `value` from Avro.
+        First 5 bytes need to be skipped since they are reserved for Confluent's internal Wire format:
+        https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format
+        """
         return (
-            df.selectExpr("CAST(value AS STRING)")
-            .select(from_json(col("value"), MOVIE_RATINGS_SOURCE_SCHEMA).alias("val"))
+            df.selectExpr("SUBSTRING(value, 6) AS avro_value")
+            .select(
+                from_avro(
+                    data=col("avro_value"),
+                    jsonFormatSchema=self._source_avro_schema,
+                ).alias("val")
+            )
             .select("val.*")
         )
 
     @staticmethod
     def _transform(df: DataFrame) -> DataFrame:
         logging.info("Applying transformation...")
-        return df.withColumn("is_approved", col("rating") >= 7)
+        final_fields = [
+            "user_id",
+            "movie_id",
+            "rating",
+            "rating_timestamp",
+            "is_approved",
+        ]
+        return df.withColumn("is_approved", col("rating") >= 7).select(final_fields)
 
     def _write_stream(self, df: DataFrame) -> None:
         logging.info("Writing stream...")

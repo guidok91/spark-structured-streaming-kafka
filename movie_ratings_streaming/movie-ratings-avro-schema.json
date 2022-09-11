@@ -1,0 +1,11 @@
+{
+    "type": "record",
+    "namespace": "io.movies",
+    "name": "MovieRating",
+    "fields": [
+        {"name": "user_id", "type": "string", "doc": "UUID of the user."},
+        {"name": "movie_id", "type": "string", "doc": "UUID of the movie."},
+        {"name": "rating", "type": "float", "doc": "Rating that the user produced, between 0 and 10."},
+        {"name": "rating_timestamp", "type": "long", "doc": "Timestamp of the rating event in milliseconds."}
+    ]
+}
