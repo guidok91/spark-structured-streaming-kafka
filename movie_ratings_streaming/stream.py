@@ -5,8 +5,6 @@ from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.session import SparkSession
 
-from movie_ratings_streaming.schema import MOVIE_RATINGS_SOURCE_SCHEMA
-
 
 class MovieRatingsStream:
     def __init__(self, config: dict, source_avro_schema: str, spark_session: SparkSession) -> None:
