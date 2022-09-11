@@ -7,6 +7,8 @@ from pyspark.sql.session import SparkSession
 
 
 class MovieRatingsStream:
+    """Reads streaming data from a Kafka topic, applies transformation and saves to a Parquet file sink.
+    """
     def __init__(self, config: dict, source_avro_schema: str, spark_session: SparkSession) -> None:
         self._config = config
         self._source_avro_schema = source_avro_schema
@@ -33,11 +35,16 @@ class MovieRatingsStream:
         return self._extract_payload(df_raw)
 
     def _extract_payload(self, df: DataFrame) -> DataFrame:
+        """Deserializes topic `value` from Avro.
+        First 5 bytes need to be skipped since they are reserved for Confluent's internal Wire format:
+        https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#wire-format
+        """
         return (
-            df.select(
+            df.selectExpr("SUBSTRING(value, 6) AS avro_value")
+            .select(
                 from_avro(
-                    data="value",
-                    jsonFormatSchema=self._source_avro_schema
+                    data=col("avro_value"),
+                    jsonFormatSchema=self._source_avro_schema,
                 ).alias("val")
             )
             .select("val.*")
