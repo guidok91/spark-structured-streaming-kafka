@@ -2,7 +2,7 @@ import logging
 
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import col, from_json
+from pyspark.sql.functions import col
 from pyspark.sql.session import SparkSession
 
 
