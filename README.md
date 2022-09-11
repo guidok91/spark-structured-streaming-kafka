@@ -1,9 +1,10 @@
 # Spark Structured Streaming Demo
-Spark Structured Streaming demo app (PySpark).
+[Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) demo app (PySpark).
 
-Consumes events from a Kafka topic, transforms and persists to a parquet file sink.
+Consumes events in real-time from a Kafka topic in Avro, transforms and persists to a Parquet file sink.
 
-Structured Streaming is a scalable and fault-tolerant stream processing engine built on the Spark SQL engine.
+## Local setup
+We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
 
 ## Running instructions
 Run the following commands in order:
@@ -35,4 +36,4 @@ $ pyspark
 ```
 
 
-You can also open a separate console and produce more events to the topic.
+You can also open a separate console, produce more events to the topic and verify that the app processes them in real-time.
