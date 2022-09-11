@@ -6,7 +6,7 @@ from pyspark.sql.session import SparkSession
 from movie_ratings_streaming.stream import MovieRatingsStream
 
 CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
-SOURCE_AVRO_JSON_SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "movie-ratings-avro-schema.json")
+SOURCE_AVRO_SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "movie-ratings-avro-schema.json")
 
 
 def _read_config() -> dict:
@@ -16,7 +16,7 @@ def _read_config() -> dict:
 
 
 def _read_source_avro_schema() -> str:
-    with open(SOURCE_AVRO_JSON_SCHEMA_PATH) as f:
+    with open(SOURCE_AVRO_SCHEMA_PATH) as f:
         return f.read()
 
 
