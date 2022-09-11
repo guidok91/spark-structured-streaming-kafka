@@ -7,9 +7,11 @@ from pyspark.sql.session import SparkSession
 
 
 class MovieRatingsStream:
-    """Reads streaming data from a Kafka topic, applies transformation and saves to a Parquet file sink.
-    """
-    def __init__(self, config: dict, source_avro_schema: str, spark_session: SparkSession) -> None:
+    """Reads streaming data from a Kafka topic, applies transformation and saves to a Parquet file sink."""
+
+    def __init__(
+        self, config: dict, source_avro_schema: str, spark_session: SparkSession
+    ) -> None:
         self._config = config
         self._source_avro_schema = source_avro_schema
         self._spark_session = spark_session
@@ -53,7 +55,13 @@ class MovieRatingsStream:
     @staticmethod
     def _transform(df: DataFrame) -> DataFrame:
         logging.info("Applying transformation...")
-        final_fields = ["user_id", "movie_id", "rating", "rating_timestamp", "is_approved"]
+        final_fields = [
+            "user_id",
+            "movie_id",
+            "rating",
+            "rating_timestamp",
+            "is_approved",
+        ]
         return df.withColumn("is_approved", col("rating") >= 7).select(final_fields)
 
     def _write_stream(self, df: DataFrame) -> None:
