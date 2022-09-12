@@ -1,15 +1,13 @@
 SHELL=/bin/bash
 
 setup:
-	python -m venv .venv && \
-	source .venv/bin/activate && \
-	pip install --upgrade pip wheel setuptools && \
-	pip install -e .
+	pip install --upgrade pip setuptools wheel poetry
+	poetry config virtualenvs.in-project true --local
+	poetry install
 
 code-style:
-	source .venv/bin/activate && \
-	black . && \
-	isort --profile black .
+	poetry run black . && \
+	poetry run isort --profile black .
 
 clean:
 	rm -rf *.egg-info data_lake/checkpoint/* data_lake/checkpoint/.[!.]* data_lake/sink/* data_lake/sink/.[!.]*
@@ -49,8 +47,7 @@ kafka-read-test-events:
 	--from-beginning
 
 streaming-app-run:
-	source .venv/bin/activate && \
-	spark-submit \
+	poetry run spark-submit \
 	--master local[*] \
 	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0 \
 	movie_ratings_streaming/entrypoint.py

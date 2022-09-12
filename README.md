@@ -22,8 +22,7 @@ Run the following commands in order:
 Check the output dataset:
 
 ```python
-$ source .venv/bin/activate
-$ pyspark
+$ poetry run pyspark
 >>> df = spark.read.parquet("data_lake/sink")
 >>> df.show()                                                                   
 +--------------------+--------------------+------+----------------+-----------+
