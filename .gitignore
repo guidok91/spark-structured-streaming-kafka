@@ -73,6 +73,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+poetry.toml
 
 .DS_Store
 metastore_db/

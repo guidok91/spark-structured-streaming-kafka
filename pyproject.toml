@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "movie-ratings-streaming"
+version = "0.1.0"
+description = "Spark Structured Streaming + Kafka demo app"
+authors = ["Guido Kosloff Gancedo <guidokosloff@gmail.com>"]
+readme = "README.md"
+packages = [{include = "movie_ratings_streaming"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+
+[tool.poetry.group.dev.dependencies]
+pyspark = "^3.3.0"
+black = "^22.8.0"
+isort = "^5.10.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
