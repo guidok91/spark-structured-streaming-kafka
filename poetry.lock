@@ -21,6 +21,25 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "certifi"
+version = "2022.6.15.1"
+description = "Python package for providing Mozilla's CA Bundle."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "charset-normalizer"
+version = "2.1.1"
+description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
+category = "dev"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.extras]
+unicode_backport = ["unicodedata2"]
+
+[[package]]
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
@@ -38,6 +57,44 @@ description = "Cross-platform colored terminal text."
 category = "dev"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "confluent-kafka"
+version = "1.9.2"
+description = "Confluent's Python client for Apache Kafka"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+avro = ["avro (==1.10.0)", "fastavro (>=0.23.0,<1.0)", "fastavro (>=1.0)", "requests"]
+dev = ["avro (==1.10.0)", "fastavro (>=0.23.0,<1.0)", "fastavro (>=1.0)", "flake8", "pytest", "pytest (==4.6.4)", "pytest-timeout", "requests"]
+doc = ["avro (==1.10.0)", "fastavro (>=0.23.0,<1.0)", "fastavro (>=1.0)", "requests", "sphinx", "sphinx-rtd-theme"]
+json = ["jsonschema", "pyrsistent", "pyrsistent (==0.16.1)", "requests"]
+protobuf = ["protobuf", "requests"]
+schema-registry = ["requests"]
+
+[[package]]
+name = "fastavro"
+version = "1.6.1"
+description = "Fast read/write of AVRO files"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+codecs = ["lz4", "python-snappy", "zstandard"]
+lz4 = ["lz4"]
+snappy = ["python-snappy"]
+zstandard = ["zstandard"]
+
+[[package]]
+name = "idna"
+version = "3.3"
+description = "Internationalized Domain Names in Applications (IDNA)"
+category = "dev"
+optional = false
+python-versions = ">=3.5"
 
 [[package]]
 name = "isort"
@@ -107,6 +164,24 @@ pandas_on_spark = ["numpy (>=1.15)", "pandas (>=1.0.5)", "pyarrow (>=1.0.0)"]
 sql = ["pandas (>=1.0.5)", "pyarrow (>=1.0.0)"]
 
 [[package]]
+name = "requests"
+version = "2.28.1"
+description = "Python HTTP for Humans."
+category = "dev"
+optional = false
+python-versions = ">=3.7, <4"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+charset-normalizer = ">=2,<3"
+idna = ">=2.5,<4"
+urllib3 = ">=1.21.1,<1.27"
+
+[package.extras]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -122,10 +197,23 @@ category = "dev"
 optional = false
 python-versions = ">=3.7"
 
+[[package]]
+name = "urllib3"
+version = "1.26.12"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4"
+
+[package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)", "brotlipy (>=0.6.0)"]
+secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "pyOpenSSL (>=0.14)", "urllib3-secure-extra"]
+socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "2480f61d2f4fdc899b1ecc99686ecdae3d961c8838737c94cb93c24fa711421d"
+content-hash = "1d69ec26f2ac602127a03033758969359a8d5a7c570fff4dd8dae59e6a86a680"
 
 [metadata.files]
 black = [
@@ -153,6 +241,14 @@ black = [
     {file = "black-22.8.0-py3-none-any.whl", hash = "sha256:d2c21d439b2baf7aa80d6dd4e3659259be64c6f49dfd0f32091063db0e006db4"},
     {file = "black-22.8.0.tar.gz", hash = "sha256:792f7eb540ba9a17e8656538701d3eb1afcb134e3b45b71f20b25c77a8db7e6e"},
 ]
+certifi = [
+    {file = "certifi-2022.6.15.1-py3-none-any.whl", hash = "sha256:43dadad18a7f168740e66944e4fa82c6611848ff9056ad910f8f7a3e46ab89e0"},
+    {file = "certifi-2022.6.15.1.tar.gz", hash = "sha256:cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb"},
+]
+charset-normalizer = [
+    {file = "charset-normalizer-2.1.1.tar.gz", hash = "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845"},
+    {file = "charset_normalizer-2.1.1-py3-none-any.whl", hash = "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"},
+]
 click = [
     {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
     {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
@@ -160,6 +256,55 @@ click = [
 colorama = [
     {file = "colorama-0.4.5-py2.py3-none-any.whl", hash = "sha256:854bf444933e37f5824ae7bfc1e98d5bce2ebe4160d46b5edf346a89358e99da"},
     {file = "colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
+]
+confluent-kafka = [
+    {file = "confluent-kafka-1.9.2.tar.gz", hash = "sha256:2fb97bd25d436bd59fe079885aa77a3a2f23cface9c6359d4700053665849262"},
+    {file = "confluent_kafka-1.9.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ff08b9f978f8b37f2961614a68f9fdb4fabd10cdd940234e80200806d93a1c30"},
+    {file = "confluent_kafka-1.9.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:4d6bfcc352cd608fcf325037b4425c0edaeae0c6a5439423a865110b59f897e9"},
+    {file = "confluent_kafka-1.9.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f970a2c6d22c934ea68d645abcc96056ecb107489f28a38b2171f65655b7e41f"},
+    {file = "confluent_kafka-1.9.2-cp310-cp310-win32.whl", hash = "sha256:e9107767cc9240cbf9b5c0fdded5eeead86a1690d1c15de6cbbdcc9d7e3b1962"},
+    {file = "confluent_kafka-1.9.2-cp310-cp310-win_amd64.whl", hash = "sha256:24872e3e427b16f77461ae7e6cf48f9c5c03c06884ac51bad179580a4dd29145"},
+    {file = "confluent_kafka-1.9.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:be7b37020f614017d8a047565b3fb61ceef9c30a9ee093f9373d06a4c32068ae"},
+    {file = "confluent_kafka-1.9.2-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7e6592533b3f8cfbc086ea2d472058f10e5f6a04a388edca01773285c63284b4"},
+    {file = "confluent_kafka-1.9.2-cp36-cp36m-win32.whl", hash = "sha256:344a7fec57d3348002392a7bd5cf66fb9dbe4a103e81636037cccd6fff944e28"},
+    {file = "confluent_kafka-1.9.2-cp36-cp36m-win_amd64.whl", hash = "sha256:5b24587b30a4d288a7b1c5cc756ee707fc1293fa28454f8db40267ed9d7e73c8"},
+    {file = "confluent_kafka-1.9.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d0cbf8e7510497afd651e134bccb9d579aa90234e45734046fcb6b752d2ee312"},
+    {file = "confluent_kafka-1.9.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d036bf5e1d7cb3743125d7caf62b1a23b12e403de240144b6117ddbb8f815a33"},
+    {file = "confluent_kafka-1.9.2-cp37-cp37m-win32.whl", hash = "sha256:6ab745babc33a864e3ca3a2659c005ed52503e39936fff5812eeb21920009c8b"},
+    {file = "confluent_kafka-1.9.2-cp37-cp37m-win_amd64.whl", hash = "sha256:3207c76d1510571cbda85560c293dec5f8d6645103b3f471abab5c83e51a7ccd"},
+    {file = "confluent_kafka-1.9.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:bef263b6d78a3e63399e1b82cc07cbb30af762884df96a369cba0e1011405344"},
+    {file = "confluent_kafka-1.9.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:382739e499deaf488459c2307ebcc0e9b3653340801d6053c207c84ad710ee8d"},
+    {file = "confluent_kafka-1.9.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ff4d1557b7fb72e752c36205a344863b8f4f23b3a834780fc36eb7ebde614de7"},
+    {file = "confluent_kafka-1.9.2-cp38-cp38-win32.whl", hash = "sha256:c4b7c4d0b647952d2b506948131d6e7e1c42ccb16aac8e3e52369c16b94e7215"},
+    {file = "confluent_kafka-1.9.2-cp38-cp38-win_amd64.whl", hash = "sha256:d533ea0e527122f177943ee35eb356b8d9f7af35fe357e0cdc0514d95804aaea"},
+    {file = "confluent_kafka-1.9.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:4f27ddf7daf630a95e1d7dfddd0c8cf8a7755c9567dc9851bf2e74c22f34af42"},
+    {file = "confluent_kafka-1.9.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:e41b9313c44f54a3cd29b0e95fa32a8e685edaa9287b338f59530b21ebc0b453"},
+    {file = "confluent_kafka-1.9.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fe31b3b6930d67380df371f5088950f93da5fac580cde3bedb35f992b2498e1b"},
+    {file = "confluent_kafka-1.9.2-cp39-cp39-win32.whl", hash = "sha256:b9ad6ad9d58c2735129f94f044b2236d7de87d77a101c8c630363add12d62a4a"},
+    {file = "confluent_kafka-1.9.2-cp39-cp39-win_amd64.whl", hash = "sha256:f96033c335da26ea1716ab9adfce459c211b023ca09528f958fb28bf099fc0df"},
+]
+fastavro = [
+    {file = "fastavro-1.6.1-cp310-cp310-macosx_10_14_x86_64.whl", hash = "sha256:de244146a3d7bc4e60c7be11f317054ee0e57ca807d85923bd8407981488ff18"},
+    {file = "fastavro-1.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1ed84fb27672e54b0bafecae1f128f6e2950828f451e59f93bb74eeccb31b496"},
+    {file = "fastavro-1.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:98df91eff0c061ffeb722732ba61d4ea9c7afd0f5403534991a984e75e3b2272"},
+    {file = "fastavro-1.6.1-cp310-cp310-win_amd64.whl", hash = "sha256:fd60999204f60d5bcc4e9a4461ce867efb23d271e955684b36c04970750e2ccb"},
+    {file = "fastavro-1.6.1-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:19d4e83bf952fc2893d11d4c82cf04c3938c921a7c5bf277256cda1005e59f16"},
+    {file = "fastavro-1.6.1-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:945d5f6e7a3076758b52fe1cebecfd86b66e6925a3a38732e93f3e1eab955256"},
+    {file = "fastavro-1.6.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:315084c45339845273193545a50f3d616787eb3231b0b1f3df229196b22f192e"},
+    {file = "fastavro-1.6.1-cp37-cp37m-win_amd64.whl", hash = "sha256:3ef81602dc6ecac3d646d64fe13aeb11252f75b76141b5b3d755bbf548313718"},
+    {file = "fastavro-1.6.1-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:462c3177aa231f8b023d4af0a73f41517df8160399564fc750a711faa0889b59"},
+    {file = "fastavro-1.6.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3dd8c98d410fbb46a475242cea1b86061d2568db89919eb9079a9a183f04d444"},
+    {file = "fastavro-1.6.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b8b77e8f33e55d8f63d65f58a2b2c99248093e2da2e8a86f58320f5715fc3f54"},
+    {file = "fastavro-1.6.1-cp38-cp38-win_amd64.whl", hash = "sha256:ac31f490e3030a6c608fffa6e337bd3f1b00f227bcb098df88a6e3e38982dfa5"},
+    {file = "fastavro-1.6.1-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:3e479b9e4b5e6184b57daab57f1992e649590e902d26b7e2ef50a605626e9053"},
+    {file = "fastavro-1.6.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f2ec2fa5f100e0f1010f550de6de8b1019a683c5034613772b4444d7c85bdb57"},
+    {file = "fastavro-1.6.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1b34c4d33e22ada2fa19566a43976b3f5ca937ab6e054e65e1467bf67353f352"},
+    {file = "fastavro-1.6.1-cp39-cp39-win_amd64.whl", hash = "sha256:18f0ddf3cc4f09839c08eec67ed3be3d391894874cb87f856a0362540d18df17"},
+    {file = "fastavro-1.6.1.tar.gz", hash = "sha256:bc37a6edbde7a04a9df28ab838b94df7527e5eea648d61633233abba59205146"},
+]
+idna = [
+    {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
+    {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
 isort = [
     {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
@@ -184,6 +329,10 @@ py4j = [
 pyspark = [
     {file = "pyspark-3.3.0.tar.gz", hash = "sha256:7ebe8e9505647b4d124d5a82fca60dfd3891021cf8ad6c5ec88777eeece92cf7"},
 ]
+requests = [
+    {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
+    {file = "requests-2.28.1.tar.gz", hash = "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},
+]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
@@ -191,4 +340,8 @@ tomli = [
 typing-extensions = [
     {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},
     {file = "typing_extensions-4.3.0.tar.gz", hash = "sha256:e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6"},
+]
+urllib3 = [
+    {file = "urllib3-1.26.12-py2.py3-none-any.whl", hash = "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"},
+    {file = "urllib3-1.26.12.tar.gz", hash = "sha256:3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e"},
 ]
