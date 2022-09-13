@@ -27,7 +27,6 @@ if __name__ == "__main__":
     )
     producer = Producer(producer_config)
 
-    # TODO produce random avro events in a loop
     logging.info(f"Producing to topic {topic}")
     producer.produce(topic=topic, value="hahahahaha", callback=acked)
 
