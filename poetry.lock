@@ -78,7 +78,7 @@ schema-registry = ["requests"]
 name = "fastavro"
 version = "1.6.1"
 description = "Fast read/write of AVRO files"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -213,7 +213,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "1d69ec26f2ac602127a03033758969359a8d5a7c570fff4dd8dae59e6a86a680"
+content-hash = "847773a71eb012012faff53c39f65c8df4bd1f434f0b654fbd7c6606cb4d94ea"
 
 [metadata.files]
 black = [
