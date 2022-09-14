@@ -14,14 +14,11 @@ clean:
 	touch data_lake/checkpoint/.gitkeep
 	touch data_lake/sink/.gitkeep
 
-kafka-start:
+kafka-up:
 	docker-compose up -d
 
-kafka-stop:
-	docker-compose stop
-
-kafka-rm:
-	docker-compose rm -f
+kafka-down:
+	docker-compose down
 
 kafka-create-topic:
 	docker exec broker \

@@ -8,7 +8,7 @@ We spin up a local Kafka cluster with Schema Registry using a [Docker Compose fi
 
 ## Running instructions
 Run the following commands in order:
-* `make kafka-start` to start local Kafka in Docker.
+* `make kafka-up` to start local Kafka in Docker.
 * `make kafka-create-topic` to create the Kafka topic we will use.
 * `make kafka-produce-test-events` to write messages to the topic (press `Ctrl-C` to exit).
 * `make setup` to create a local Python venv and install the Spark Structured Streaming app.
