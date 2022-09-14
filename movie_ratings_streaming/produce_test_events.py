@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     config = read_config()
     source_avro_schema = read_source_avro_schema()
-    topic = config["stream"]["source_kafka_topic"]
+    topic = config["kafka"]["subscribe"]
 
     schema_registry_config = {"url": config["kafka"]["schema.registry.url"]}
     schema_registry_client = SchemaRegistryClient(schema_registry_config)

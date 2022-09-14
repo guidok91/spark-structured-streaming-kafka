@@ -1,5 +1,3 @@
-import logging
-
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import col
@@ -22,18 +20,11 @@ class MovieRatingsStream:
         self._write_stream(df_transformed)
 
     def _read_stream(self) -> DataFrame:
-        topic = self._config["stream"]["source_kafka_topic"]
-
-        stream = (
-            self._spark_session.readStream.format("kafka")
-            .option("subscribe", topic)
-            .option("failOnDataLoss", "false")
-        )
+        stream = self._spark_session.readStream.format("kafka")
 
         for k, v in self._config["kafka"].items():
             stream = stream.option(k, v)
 
-        logging.info(f"Reading stream from topic {topic}...")
         df_raw = stream.load()
 
         return self._extract_payload(df_raw)
@@ -56,7 +47,6 @@ class MovieRatingsStream:
 
     @staticmethod
     def _transform(df: DataFrame) -> DataFrame:
-        logging.info("Applying transformation...")
         final_fields = [
             "user_id",
             "movie_id",
@@ -67,8 +57,6 @@ class MovieRatingsStream:
         return df.withColumn("is_approved", col("rating") >= 7).select(final_fields)
 
     def _write_stream(self, df: DataFrame) -> None:
-        logging.info("Writing stream...")
-
         sink_dir = self._config["stream"]["sink_dir"]
         checkpoint_dir = self._config["stream"]["checkpoint_dir"]
         trigger_processing_time = self._config["stream"]["trigger_processing_time"]
