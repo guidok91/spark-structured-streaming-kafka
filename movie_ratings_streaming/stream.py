@@ -24,8 +24,10 @@ class MovieRatingsStream:
     def _read_stream(self) -> DataFrame:
         topic = self._config["stream"]["source_kafka_topic"]
 
-        stream = self._spark_session.readStream.format("kafka").option(
-            "subscribe", topic
+        stream = (
+            self._spark_session.readStream.format("kafka")
+            .option("subscribe", topic)
+            .option("failOnDataLoss", "false")
         )
 
         for k, v in self._config["kafka"].items():

@@ -1,6 +1,5 @@
 import logging
 import socket
-import time
 import uuid
 from random import randint, uniform
 
@@ -52,5 +51,4 @@ if __name__ == "__main__":
             },
             on_delivery=acked,
         )
-        producer.poll(1)
-        time.sleep(1)
+        producer.poll()
