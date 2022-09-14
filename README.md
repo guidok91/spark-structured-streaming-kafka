@@ -8,14 +8,15 @@ We spin up a local Kafka cluster with Schema Registry using a [Docker Compose fi
 
 ## Running instructions
 Run the following commands in order:
+* `make setup` to install the Spark Structured Streaming app on a local Python env.
 * `make kafka-up` to start local Kafka in Docker.
 * `make kafka-create-topic` to create the Kafka topic we will use.
-* `make kafka-produce-test-events` to write messages to the topic (press `Ctrl-C` to exit).
-* `make setup` to create a local Python venv and install the Spark Structured Streaming app.
+* `make kafka-produce-test-events` to start writing messages to the topic.
+
+On a separate console, run:
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
-Check the output dataset:
-
+You can check the output dataset by running:
 ```python
 $ poetry run pyspark
 >>> df = spark.read.parquet("data_lake/sink")
@@ -28,6 +29,3 @@ $ poetry run pyspark
 |08da4c50-7bf6-4f1...|6441219e-18f0-452...|   6.8|   1642209780000|      false|
 +--------------------+--------------------+------+----------------+-----------+
 ```
-
-
-You can also open a separate console, produce more events to the topic and verify that the app processes them in real-time.
