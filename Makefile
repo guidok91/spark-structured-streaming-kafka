@@ -10,9 +10,8 @@ code-style:
 	poetry run isort --profile black .
 
 clean:
-	rm -rf *.egg-info data_lake/checkpoint/* data_lake/checkpoint/.[!.]* data_lake/sink/* data_lake/sink/.[!.]*
-	touch data_lake/checkpoint/.gitkeep
-	touch data_lake/sink/.gitkeep
+	rm -rf *.egg-info spark-warehouse checkpoint/* checkpoint/.[!.]*
+	touch checkpoint/.gitkeep
 
 kafka-up:
 	docker-compose up -d
@@ -38,8 +37,31 @@ kafka-read-test-events:
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
+create-output-table:
+	poetry run spark-sql \
+	--master local[*] \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.0 \
+	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
+	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
+	--conf spark.sql.catalog.iceberg.type=hadoop \
+	--conf spark.sql.catalog.iceberg.warehouse=spark-warehouse \
+	-e "CREATE TABLE IF NOT EXISTS iceberg.default.movie_ratings (user_id STRING, movie_id STRING, rating FLOAT, rating_timestamp BIGINT, is_approved BOOLEAN) USING iceberg"
+
+pyspark:
+	poetry run pyspark \
+	--master local[*] \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.0 \
+	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
+	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
+	--conf spark.sql.catalog.iceberg.type=hadoop \
+	--conf spark.sql.catalog.iceberg.warehouse=spark-warehouse
+
 streaming-app-run:
 	poetry run spark-submit \
 	--master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0,org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.0 \
+	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
+	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
+	--conf spark.sql.catalog.iceberg.type=hadoop \
+	--conf spark.sql.catalog.iceberg.warehouse=spark-warehouse \
 	movie_ratings_streaming/entrypoint.py

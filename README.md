@@ -1,7 +1,7 @@
 # Spark Structured Streaming Demo
 [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) demo app (PySpark).
 
-Consumes events in real-time from a Kafka topic in Avro, transforms and persists to a Parquet file sink.
+Consumes events in real-time from a Kafka topic in Avro, transforms and persists to an [Iceberg](https://iceberg.apache.org/) table.
 
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
@@ -14,12 +14,13 @@ Run the following commands in order:
 * `make kafka-produce-test-events` to start writing messages to the topic.
 
 On a separate console, run:
+* `make create-output-table` to create the output Iceberg table.
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
 You can check the output dataset by running:
 ```python
-$ poetry run pyspark
->>> df = spark.read.parquet("data_lake/sink")
+$ make pyspark
+>>> df = spark.read.table("iceberg.default.movie_ratings")
 >>> df.show()                                                                   
 +--------------------+--------------------+------+----------------+-----------+
 |             user_id|            movie_id|rating|rating_timestamp|is_approved|

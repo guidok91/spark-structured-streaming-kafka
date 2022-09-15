@@ -57,17 +57,17 @@ class MovieRatingsStream:
         return df.withColumn("is_approved", col("rating") >= 7).select(final_fields)
 
     def _write_stream(self, df: DataFrame) -> None:
-        sink_dir = self._config["stream"]["sink_dir"]
+        sink_table = self._config["stream"]["sink_table"]
         checkpoint_dir = self._config["stream"]["checkpoint_dir"]
         trigger_processing_time = self._config["stream"]["trigger_processing_time"]
         output_mode = self._config["stream"]["output_mode"]
 
         (
-            df.writeStream.format("parquet")
-            .option("path", sink_dir)
-            .option("checkpointLocation", checkpoint_dir)
+            df.writeStream.format("iceberg")
             .outputMode(output_mode)
             .trigger(processingTime=trigger_processing_time)
+            .option("path", sink_table)
+            .option("checkpointLocation", checkpoint_dir)
             .start()
             .awaitTermination()
         )
