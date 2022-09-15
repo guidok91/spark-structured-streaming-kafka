@@ -80,3 +80,5 @@ metastore_db/
 .idea/
 checkpoint
 !checkpoint/.gitkeep
+
+spark-warehouse
