@@ -78,5 +78,5 @@ poetry.toml
 .DS_Store
 metastore_db/
 .idea/
-# checkpoint
-# !checkpoint/.gitkeep
+checkpoint
+!checkpoint/.gitkeep
