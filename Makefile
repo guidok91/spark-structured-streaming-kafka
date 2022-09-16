@@ -58,3 +58,13 @@ streaming-app-run:
 	poetry run spark-submit \
 	$(SPARK_ARGS) \
 	movie_ratings_streaming/entrypoint.py
+
+expire-old-snapshots:
+	poetry run spark-sql \
+	$(SPARK_ARGS) \
+	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', retain_last => 5)"
+
+compact-small-files:
+	poetry run spark-sql \
+	$(SPARK_ARGS) \
+	-e "CALL iceberg.system.rewrite_data_files(table => 'iceberg.default.movie_ratings')"
