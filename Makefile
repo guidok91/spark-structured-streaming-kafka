@@ -16,7 +16,7 @@ code-style:
 	poetry run isort --profile black .
 
 clean:
-	rm -rf *.egg-info spark-warehouse checkpoint/* checkpoint/.[!.]*
+	rm -rf *.egg-info spark-warehouse metastore_db derby.log checkpoint/* checkpoint/.[!.]*
 	touch checkpoint/.gitkeep
 
 kafka-up:
