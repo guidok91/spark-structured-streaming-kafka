@@ -1,5 +1,5 @@
-SHELL=/bin/bash
-SPARK_ARGS=--master local[*] \
+SHELL = /bin/bash
+SPARK_ARGS = --master local[*] \
 	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0,org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.0 \
 	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
 	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
