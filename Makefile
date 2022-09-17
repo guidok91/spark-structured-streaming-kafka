@@ -30,7 +30,7 @@ kafka-create-topic:
 	kafka-topics \
 	--bootstrap-server broker:9092 \
 	--create \
-	--topic movies.ratings
+	--topic movies_ratings
 
 kafka-produce-test-events:
 	poetry run python movie_ratings_streaming/produce_test_events.py
@@ -38,7 +38,7 @@ kafka-produce-test-events:
 kafka-read-test-events:
 	docker exec --interactive --tty schema-registry \
 	kafka-avro-console-consumer \
-	--topic movies.ratings \
+	--topic movies_ratings \
 	--bootstrap-server broker:9092 \
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
