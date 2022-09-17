@@ -148,20 +148,20 @@ python-versions = "*"
 
 [[package]]
 name = "pyspark"
-version = "3.2.2"
+version = "3.3.0"
 description = "Apache Spark Python API"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 py4j = "0.10.9.5"
 
 [package.extras]
-ml = ["numpy (>=1.7)"]
-mllib = ["numpy (>=1.7)"]
-pandas_on_spark = ["numpy (>=1.14)", "pandas (>=0.23.2)", "pyarrow (>=1.0.0)"]
-sql = ["pandas (>=0.23.2)", "pyarrow (>=1.0.0)"]
+ml = ["numpy (>=1.15)"]
+mllib = ["numpy (>=1.15)"]
+pandas_on_spark = ["numpy (>=1.15)", "pandas (>=1.0.5)", "pyarrow (>=1.0.0)"]
+sql = ["pandas (>=1.0.5)", "pyarrow (>=1.0.0)"]
 
 [[package]]
 name = "requests"
@@ -213,7 +213,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "003801cad69de92f67292d72b0ce38364f8ebee250b8994491a90e187963eff0"
+content-hash = "7cf5ed396de010a37851c83933e5df6a561a162172001accebe5669b91fa535b"
 
 [metadata.files]
 black = [
@@ -327,7 +327,7 @@ py4j = [
     {file = "py4j-0.10.9.5.tar.gz", hash = "sha256:276a4a3c5a2154df1860ef3303a927460e02e97b047dc0a47c1c3fb8cce34db6"},
 ]
 pyspark = [
-    {file = "pyspark-3.2.2.tar.gz", hash = "sha256:5455214cf0b83d4a184cda25ca3b0812481915353b180cf7d7ac227728a4d99e"},
+    {file = "pyspark-3.3.0.tar.gz", hash = "sha256:7ebe8e9505647b4d124d5a82fca60dfd3891021cf8ad6c5ec88777eeece92cf7"},
 ]
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},

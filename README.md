@@ -6,6 +6,8 @@ Consumes events in real-time from a Kafka topic in Avro, transforms and persists
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
 
+We install a local Spark Structured Streaming app using Poetry.
+
 ## Running instructions
 Run the following commands in order:
 * `make setup` to install the Spark Structured Streaming app on a local Python env.
@@ -17,7 +19,7 @@ On a separate console, run:
 * `make create-output-table` to create the output Iceberg table.
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
-You can check the output dataset by running:
+On a separate console, you can check the output dataset by running:
 ```python
 $ make pyspark
 >>> df = spark.read.table("iceberg.default.movie_ratings")
@@ -30,3 +32,12 @@ $ make pyspark
 |08da4c50-7bf6-4f1...|6441219e-18f0-452...|   6.8|   1642209780000|      false|
 +--------------------+--------------------+------+----------------+-----------+
 ```
+
+## Table maintenance
+The streaming microbatches produce:
+- Lots of small files in the table.
+- Constant new Iceberg table snapshots.
+
+Therefore, we can periodically run these two maintenance procedures to mitigate the issues above:
+- `make compact-small-files`
+- `make expire-old-snapshots`
