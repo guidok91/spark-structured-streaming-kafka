@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0,org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.1 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2,org.apache.spark:spark-avro_2.12:3.2.2,org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:0.14.1 \
 	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
 	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
 	--conf spark.sql.catalog.iceberg.type=hadoop \
@@ -62,7 +62,7 @@ streaming-app-run:
 expire-old-snapshots:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
-	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', retain_last => 5)"
+	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', older_than => TIMESTAMP '2999-12-31', retain_last => 3)"
 
 compact-small-files:
 	poetry run spark-sql \
