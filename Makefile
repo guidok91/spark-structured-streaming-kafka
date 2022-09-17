@@ -47,7 +47,7 @@ create-output-table:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
 	-e "CREATE TABLE IF NOT EXISTS iceberg.default.movie_ratings \
-	    (user_id STRING, movie_id STRING, rating FLOAT, rating_timestamp BIGINT, is_approved BOOLEAN) \
+		(user_id STRING, movie_id STRING, rating FLOAT, rating_timestamp BIGINT, is_approved BOOLEAN) \
 		USING iceberg"
 
 pyspark:
