@@ -78,7 +78,7 @@ poetry.toml
 .DS_Store
 metastore_db/
 .idea/
-data_lake/checkpoint
-!data_lake/checkpoint/.gitkeep
-data_lake/sink
-!data_lake/sink/.gitkeep
+checkpoint
+!checkpoint/.gitkeep
+
+spark-warehouse
