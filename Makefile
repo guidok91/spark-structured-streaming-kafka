@@ -62,7 +62,7 @@ streaming-app-run:
 expire-old-snapshots:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
-	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', older_than => TIMESTAMP '2999-12-31', retain_last => 3)"
+	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', older_than => TIMESTAMP '2999-12-31', retain_last => 1)"
 
 compact-small-files:
 	poetry run spark-sql \
