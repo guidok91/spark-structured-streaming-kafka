@@ -25,22 +25,21 @@ if __name__ == "__main__":
     source_avro_schema = read_source_avro_schema()
     topic = config["kafka"]["subscribe"]
 
-    schema_registry_config = {"url": config["kafka"]["schema.registry.url"]}
-    schema_registry_client = SchemaRegistryClient(schema_registry_config)
-
     avro_serializer = AvroSerializer(
-        schema_registry_client=schema_registry_client,
+        schema_registry_client=SchemaRegistryClient(
+            {"url": config["kafka"]["schema.registry.url"]}
+        ),
         schema_str=source_avro_schema,
     )
+    producer = SerializingProducer(
+        {
+            "bootstrap.servers": config["kafka"]["kafka.bootstrap.servers"],
+            "client.id": socket.gethostname(),
+            "value.serializer": avro_serializer,
+        }
+    )
 
-    producer_config = {
-        "bootstrap.servers": config["kafka"]["kafka.bootstrap.servers"],
-        "client.id": socket.gethostname(),
-        "value.serializer": avro_serializer,
-    }
-    producer = SerializingProducer(producer_config)
-
-    while 1:
+    while True:
         producer.produce(
             topic=topic,
             value={
