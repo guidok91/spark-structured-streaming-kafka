@@ -10,7 +10,8 @@ packages = [{include = "movie_ratings_streaming"}]
 python = ">=3.9,<4.0"
 
 [tool.poetry.group.dev.dependencies]
-pyspark = "3.3.0"
+pyspark = "3.3.1"
+delta-spark = "^2.2.0"
 black = "^22.8.0"
 isort = "^5.10.1"
 confluent-kafka = "^1.9.2"
