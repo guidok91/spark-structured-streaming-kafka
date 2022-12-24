@@ -63,11 +63,10 @@ class MovieRatingsStream:
         output_mode = self._config["stream"]["output_mode"]
 
         (
-            df.writeStream.format("iceberg")
+            df.writeStream.format("delta")
             .outputMode(output_mode)
             .trigger(processingTime=trigger_processing_time)
-            .option("path", sink_table)
             .option("checkpointLocation", checkpoint_dir)
-            .start()
+            .toTable(sink_table)
             .awaitTermination()
         )

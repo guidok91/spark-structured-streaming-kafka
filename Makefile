@@ -1,10 +1,8 @@
 SHELL = /bin/bash
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0,org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.0.0 \
-	--conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
-	--conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
-	--conf spark.sql.catalog.iceberg.type=hadoop \
-	--conf spark.sql.catalog.iceberg.warehouse=spark-warehouse
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,org.apache.spark:spark-avro_2.12:3.3.0,io.delta:delta-core_2.12:2.2.0 \
+	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
+	--conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog
 
 setup:
 	pip install --upgrade pip setuptools wheel poetry
@@ -43,13 +41,6 @@ kafka-read-test-events:
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
-create-output-table:
-	poetry run spark-sql \
-	$(SPARK_ARGS) \
-	-e "CREATE TABLE IF NOT EXISTS iceberg.default.movie_ratings \
-		(user_id STRING, movie_id STRING, rating FLOAT, rating_timestamp BIGINT, is_approved BOOLEAN) \
-		USING iceberg"
-
 pyspark:
 	poetry run pyspark \
 	$(SPARK_ARGS)
@@ -59,12 +50,12 @@ streaming-app-run:
 	$(SPARK_ARGS) \
 	movie_ratings_streaming/entrypoint.py
 
-expire-old-snapshots:
+vacuum:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
-	-e "CALL iceberg.system.expire_snapshots(table => 'iceberg.default.movie_ratings', older_than => TIMESTAMP '2999-12-31', retain_last => 1)"
+	-e "VACUUM movie_ratings RETAIN 168 HOURS"
 
 compact-small-files:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
-	-e "CALL iceberg.system.rewrite_data_files(table => 'iceberg.default.movie_ratings')"
+	-e "OPTIMIZE movie_ratings"

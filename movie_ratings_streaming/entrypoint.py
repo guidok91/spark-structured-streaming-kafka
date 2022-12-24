@@ -7,6 +7,12 @@ if __name__ == "__main__":
     config = read_config()
     source_avro_schema = read_source_avro_schema()
 
-    spark_session = SparkSession.builder.getOrCreate()
+    spark_session = (
+        SparkSession.builder.config(
+            "spark.sql.sources.partitionOverwriteMode", "dynamic"
+        )
+        .enableHiveSupport()
+        .getOrCreate()
+    )
 
     MovieRatingsStream(config, source_avro_schema, spark_session).run()
