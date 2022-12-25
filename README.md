@@ -3,6 +3,9 @@
 
 Consumes events in real-time from a Kafka topic in Avro, transforms and persists to a [Delta](https://delta.io/) table.
 
+## Data Architecture
+![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)
+
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
 
