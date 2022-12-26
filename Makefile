@@ -45,6 +45,10 @@ pyspark:
 	poetry run pyspark \
 	$(SPARK_ARGS)
 
+spark-sql:
+	poetry run spark-sql \
+	$(SPARK_ARGS)
+
 streaming-app-run:
 	poetry run spark-submit \
 	$(SPARK_ARGS) \
