@@ -1,3 +1,4 @@
+from delta.tables import DeltaTable
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import col, from_unixtime, to_date
@@ -51,8 +52,8 @@ class MovieRatingsStream:
             "user_id",
             "movie_id",
             "rating",
-            "rating_timestamp",
             "is_approved",
+            "rating_timestamp",
             "rating_date",
         ]
         return (
@@ -62,17 +63,31 @@ class MovieRatingsStream:
         )
 
     def _write_stream(self, df: DataFrame) -> None:
-        sink_table = self._config["stream"]["sink_table"]
         checkpoint_dir = self._config["stream"]["checkpoint_dir"]
         trigger_processing_time = self._config["stream"]["trigger_processing_time"]
         output_mode = self._config["stream"]["output_mode"]
 
         (
             df.writeStream.format("delta")
-            .partitionBy(["rating_date"])
+            .foreachBatch(self._upsert_to_sink)
             .outputMode(output_mode)
             .trigger(processingTime=trigger_processing_time)
             .option("checkpointLocation", checkpoint_dir)
-            .toTable(sink_table)
+            .start()
             .awaitTermination()
+        )
+
+    def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
+        sink_table_name = self._config["stream"]["sink_table"]
+        sink_table = DeltaTable.forName(self._spark_session, sink_table_name)
+
+        (
+            sink_table.alias("existing")
+            .merge(
+                source=df.alias("incoming"),
+                condition="existing.user_id = incoming.user_id AND existing.movie_id = incoming.movie_id",
+            )
+            .whenMatchedUpdateAll()
+            .whenNotMatchedInsertAll()
+            .execute()
         )

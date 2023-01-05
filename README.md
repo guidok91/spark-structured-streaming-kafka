@@ -1,7 +1,9 @@
 # Spark Structured Streaming Demo
 [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) demo app (PySpark).
 
-Consumes events in real-time from a Kafka topic in Avro, transforms and persists to a [Delta](https://delta.io/) table.
+Consumes movie rating events in real-time from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
+
+The pipeline handles updates and duplicate events by upserting to the destination table based on the event primary key (user_id and movie_id).
 
 ## Data Architecture
 ![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)
@@ -19,6 +21,7 @@ Run the following commands in order:
 * `make kafka-produce-test-events` to start writing messages to the topic.
 
 On a separate console, run:
+* `make create-sink-table` to create the destination Delta table.
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
 On a separate console, you can check the output dataset by running:
@@ -26,13 +29,13 @@ On a separate console, you can check the output dataset by running:
 $ make pyspark
 >>> df = spark.read.table("movie_ratings")
 >>> df.show()                                                                   
-+--------------------+--------------------+------+----------------+-----------+
-|             user_id|            movie_id|rating|rating_timestamp|is_approved|
-+--------------------+--------------------+------+----------------+-----------+
-|f3c413bf-ab29-4e9...|30f90f95-b90a-452...|   8.9|   1642236375000|       true|
-|7c70a6de-5352-41c...|fcade620-b844-41c...|   7.6|   1642239975000|       true|
-|08da4c50-7bf6-4f1...|6441219e-18f0-452...|   6.8|   1642209780000|      false|
-+--------------------+--------------------+------+----------------+-----------+
++--------------------+--------------------+------+-----------+----------------+-----------+
+|             user_id|            movie_id|rating|is_approved|rating_timestamp|rating_date|
++--------------------+--------------------+------+-----------+----------------+-----------+
+|0c67b5fe-8cf7-11e...|0c67b6b2-8cf7-11e...|   1.8|      false|      1672933621| 2023-01-05|
+|601f90a8-8cf8-11e...|601f9152-8cf8-11e...|   9.5|       true|      1672934191| 2023-01-05|
+|6249323a-8cf8-11e...|624932da-8cf8-11e...|   3.1|      false|      1672934194| 2023-01-05|
++--------------------+--------------------+------+-----------+----------------+-----------+
 ```
 
 ## Table maintenance
