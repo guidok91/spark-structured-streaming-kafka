@@ -1,7 +1,9 @@
 import logging
 import socket
+import time
 import uuid
-from random import randint, uniform
+from datetime import datetime
+from random import uniform
 
 from confluent_kafka import SerializingProducer
 from confluent_kafka.schema_registry import SchemaRegistryClient
@@ -46,7 +48,7 @@ if __name__ == "__main__":
                 "user_id": str(uuid.uuid1()),
                 "movie_id": str(uuid.uuid1()),
                 "rating": round(uniform(0, 10), 1),
-                "rating_timestamp": randint(1609459200000, 1661990400000),
+                "rating_timestamp": int(time.mktime(datetime.utcnow().timetuple())),
             },
             on_delivery=acked,
         )

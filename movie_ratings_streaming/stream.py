@@ -1,6 +1,6 @@
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, from_unixtime, to_date
 from pyspark.sql.session import SparkSession
 
 
@@ -53,8 +53,13 @@ class MovieRatingsStream:
             "rating",
             "rating_timestamp",
             "is_approved",
+            "rating_date",
         ]
-        return df.withColumn("is_approved", col("rating") >= 7).select(final_fields)
+        return (
+            df.withColumn("is_approved", col("rating") >= 7)
+            .withColumn("rating_date", to_date(from_unixtime("rating_timestamp")))
+            .select(final_fields)
+        )
 
     def _write_stream(self, df: DataFrame) -> None:
         sink_table = self._config["stream"]["sink_table"]
@@ -64,6 +69,7 @@ class MovieRatingsStream:
 
         (
             df.writeStream.format("delta")
+            .partitionBy(["rating_date"])
             .outputMode(output_mode)
             .trigger(processingTime=trigger_processing_time)
             .option("checkpointLocation", checkpoint_dir)
