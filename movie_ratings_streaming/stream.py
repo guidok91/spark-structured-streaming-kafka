@@ -6,7 +6,7 @@ from pyspark.sql.session import SparkSession
 
 
 class MovieRatingsStream:
-    """Reads streaming data from a Kafka topic, applies transformation and saves to a Parquet file sink."""
+    """Reads streaming data from a Kafka topic, applies transformation and saves to a Delta sink."""
 
     def __init__(
         self, config: dict, source_avro_schema: str, spark_session: SparkSession
