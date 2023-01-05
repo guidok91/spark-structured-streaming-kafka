@@ -57,10 +57,10 @@ create-sink-table:
 		movie_id STRING, \
 		rating FLOAT, \
 		is_approved BOOLEAN, \
-		rating_timestamp BIGINT, \
-		rating_date DATE \
+		rating_timestamp BIGINT \
 	) \
-	USING DELTA"
+	USING DELTA \
+	PARTITIONED BY (rating_date DATE)"
 
 streaming-app-run:
 	poetry run spark-submit \
