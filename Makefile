@@ -53,14 +53,14 @@ create-sink-table:
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
 	-e "CREATE TABLE movie_ratings ( \
-			user_id STRING, \
-			movie_id STRING, \
-			rating FLOAT, \
-			is_approved BOOLEAN, \
-			rating_timestamp BIGINT, \
-			rating_date DATE \
-		) \
-		USING DELTA"
+		user_id STRING, \
+		movie_id STRING, \
+		rating FLOAT, \
+		is_approved BOOLEAN, \
+		rating_timestamp BIGINT, \
+		rating_date DATE \
+	) \
+	USING DELTA"
 
 streaming-app-run:
 	poetry run spark-submit \
