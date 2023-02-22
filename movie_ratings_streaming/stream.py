@@ -64,14 +64,12 @@ class MovieRatingsStream:
 
     def _write_stream(self, df: DataFrame) -> None:
         checkpoint_dir = self._config["stream"]["checkpoint_dir"]
-        trigger_processing_time = self._config["stream"]["trigger_processing_time"]
         output_mode = self._config["stream"]["output_mode"]
 
         (
             df.writeStream.format("delta")
             .foreachBatch(self._upsert_to_sink)
             .outputMode(output_mode)
-            .trigger(processingTime=trigger_processing_time)
             .option("checkpointLocation", checkpoint_dir)
             .start()
             .awaitTermination()
