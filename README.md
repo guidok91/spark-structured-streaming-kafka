@@ -3,7 +3,7 @@
 
 Consumes movie rating events in real-time from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
 
-The pipeline handles updates and duplicate events by upserting to the destination table based on the event primary key (user_id and movie_id).
+The pipeline handles updates and duplicate events by upserting to the destination table based on the `event_id`.
 
 ## Data Architecture
 ![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)

@@ -49,6 +49,7 @@ class MovieRatingsStream:
     @staticmethod
     def _transform(df: DataFrame) -> DataFrame:
         final_fields = [
+            "event_id",
             "user_id",
             "movie_id",
             "rating",
@@ -83,7 +84,7 @@ class MovieRatingsStream:
             sink_table.alias("existing")
             .merge(
                 source=df.alias("incoming"),
-                condition="existing.user_id = incoming.user_id AND existing.movie_id = incoming.movie_id",
+                condition="existing.event_id = incoming.event_id",
             )
             .whenMatchedUpdateAll()
             .whenNotMatchedInsertAll()

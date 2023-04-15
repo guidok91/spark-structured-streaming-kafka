@@ -3,6 +3,7 @@
     "namespace": "io.movies",
     "name": "MovieRating",
     "fields": [
+        {"name": "event_id", "type": "string", "doc": "UUID of the event."},
         {"name": "user_id", "type": "string", "doc": "UUID of the user."},
         {"name": "movie_id", "type": "string", "doc": "UUID of the movie."},
         {"name": "rating", "type": "float", "doc": "Rating that the user produced, between 0 and 10."},

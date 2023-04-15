@@ -45,6 +45,7 @@ if __name__ == "__main__":
         producer.produce(
             topic=topic,
             value={
+                "event_id": str(uuid.uuid1()),
                 "user_id": str(uuid.uuid1()),
                 "movie_id": str(uuid.uuid1()),
                 "rating": round(uniform(0, 10), 1),

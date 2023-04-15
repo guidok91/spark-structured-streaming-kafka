@@ -37,7 +37,7 @@ kafka-create-topic: # Create Kafka topic for local dev.
 	kafka-topics \
 	--bootstrap-server broker:9092 \
 	--create \
-	--topic movies_ratings
+	--topic movies.rating.v1
 
 .PHONY: kafka-produce-test-events
 kafka-produce-test-events: # Produce dummy test events locally.
@@ -47,7 +47,7 @@ kafka-produce-test-events: # Produce dummy test events locally.
 kafka-read-test-events: # Read and display local test events.
 	docker exec --interactive --tty schema-registry \
 	kafka-avro-console-consumer \
-	--topic movies_ratings \
+	--topic movies.rating.v1 \
 	--bootstrap-server broker:9092 \
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
@@ -67,6 +67,7 @@ create-sink-table: # Create sink Delta table locally.
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
 	-e "CREATE TABLE movie_ratings ( \
+		event_id STRING, \
 		user_id STRING, \
 		movie_id STRING, \
 		rating FLOAT, \
