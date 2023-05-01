@@ -58,7 +58,8 @@ class MovieRatingsStream:
             "rating_date",
         ]
         return (
-            df.withColumn("is_approved", col("rating") >= 7)
+            df.dropDuplicates(["event_id"])
+            .withColumn("is_approved", col("rating") >= 7)
             .withColumn("rating_date", to_date(from_unixtime("rating_timestamp")))
             .select(final_fields)
         )
