@@ -5,6 +5,8 @@ Consumes movie rating events in real-time from a Kafka topic in Avro, transforms
 
 The pipeline handles updates and duplicate events by upserting to the destination table based on the `event_id`.
 
+Late arriving events from more than 5 days ago are discarded (for performance reasons in the upsert).
+
 ## Data Architecture
 ![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)
 

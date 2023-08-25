@@ -1,7 +1,9 @@
+from datetime import datetime, timedelta
+
 from delta.tables import DeltaTable
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import col, from_unixtime, to_date
+from pyspark.sql.functions import col, from_unixtime, lit, to_date
 from pyspark.sql.session import SparkSession
 
 
@@ -57,10 +59,12 @@ class MovieRatingsStream:
             "rating_timestamp",
             "rating_date",
         ]
+        late_arriving_events_threshold = datetime.utcnow().date() - timedelta(days=5)
         return (
             df.dropDuplicates(["event_id"])
             .withColumn("is_approved", col("rating") >= 7)
             .withColumn("rating_date", to_date(from_unixtime("rating_timestamp")))
+            .where(col("rating_date") >= lit(late_arriving_events_threshold))
             .select(final_fields)
         )
 
