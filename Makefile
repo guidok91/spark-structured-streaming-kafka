@@ -1,5 +1,5 @@
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2,org.apache.spark:spark-avro_2.12:3.3.2,io.delta:delta-core_2.12:2.2.0 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,org.apache.spark:spark-avro_2.12:3.4.1,io.delta:delta-core_2.12:2.4.0 \
 	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
 	--conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog
 
@@ -37,7 +37,7 @@ kafka-create-topic: # Create Kafka topic for local dev.
 	kafka-topics \
 	--bootstrap-server broker:9092 \
 	--create \
-	--topic movies.rating.v1
+	--topic movie.ratings.v1
 
 .PHONY: kafka-produce-test-events
 kafka-produce-test-events: # Produce dummy test events locally.
@@ -47,7 +47,7 @@ kafka-produce-test-events: # Produce dummy test events locally.
 kafka-read-test-events: # Read and display local test events.
 	docker exec --interactive --tty schema-registry \
 	kafka-avro-console-consumer \
-	--topic movies.rating.v1 \
+	--topic movie.ratings.v1 \
 	--bootstrap-server broker:9092 \
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
