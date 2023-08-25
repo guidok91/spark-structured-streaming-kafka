@@ -3,9 +3,9 @@
 
 Consumes movie rating events in real-time from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
 
-The pipeline handles updates and duplicate events by upserting to the destination table based on the `event_id`.
+The pipeline handles updates and duplicate events by merging to the destination table based on the `event_id`.
 
-Late arriving events from more than 5 days ago are discarded (for performance reasons in the upsert).
+Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
 
 ## Data Architecture
 ![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)
