@@ -1,8 +1,12 @@
+from datetime import datetime, timedelta
+
 from delta.tables import DeltaTable
 from pyspark.sql.avro.functions import from_avro
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import col, from_unixtime, to_date
+from pyspark.sql.functions import col, from_unixtime, lit, to_date
 from pyspark.sql.session import SparkSession
+
+LATE_ARRIVING_EVENTS_THRESHOLD_DAYS = 5
 
 
 class MovieRatingsStream:
@@ -57,10 +61,14 @@ class MovieRatingsStream:
             "rating_timestamp",
             "rating_date",
         ]
+        max_late_arriving_events_date = datetime.utcnow().date() - timedelta(
+            days=LATE_ARRIVING_EVENTS_THRESHOLD_DAYS
+        )
         return (
             df.dropDuplicates(["event_id"])
             .withColumn("is_approved", col("rating") >= 7)
             .withColumn("rating_date", to_date(from_unixtime("rating_timestamp")))
+            .where(col("rating_date") >= lit(max_late_arriving_events_date))
             .select(final_fields)
         )
 
@@ -85,7 +93,7 @@ class MovieRatingsStream:
             sink_table.alias("existing")
             .merge(
                 source=df.alias("incoming"),
-                condition="DATE_ADD(existing.rating_date, 5) >= incoming.rating_date AND existing.event_id = incoming.event_id",
+                condition=f"existing.event_id = incoming.event_id AND existing.rating_date >= DATE_ADD(CURRENT_DATE(), -{LATE_ARRIVING_EVENTS_THRESHOLD_DAYS})",
             )
             .whenMatchedUpdateAll()
             .whenNotMatchedInsertAll()
