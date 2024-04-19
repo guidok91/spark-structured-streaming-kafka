@@ -81,15 +81,3 @@ streaming-app-run: # Run Spark Structured streaming app locally.
 	poetry run spark-submit \
 	$(SPARK_ARGS) \
 	movie_ratings_streaming/entrypoint.py
-
-.PHONY:
-vacuum: # Run Delta vacuum command on the sink table.
-	poetry run spark-sql \
-	$(SPARK_ARGS) \
-	-e "VACUUM movie_ratings RETAIN 168 HOURS"
-
-.PHONY:
-compact-small-files: # Run Delta optimize command on the sink table.
-	poetry run spark-sql \
-	$(SPARK_ARGS) \
-	-e "OPTIMIZE movie_ratings"
