@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import datetime
 
 from delta.tables import DeltaTable
 from pyspark.sql.avro.functions import from_avro
@@ -12,9 +12,7 @@ LATE_ARRIVING_EVENTS_THRESHOLD_DAYS = 5
 class MovieRatingsStream:
     """Reads streaming data from a Kafka topic, applies transformation and saves to a Delta sink."""
 
-    def __init__(
-        self, config: dict, source_avro_schema: str, spark_session: SparkSession
-    ) -> None:
+    def __init__(self, config: dict, source_avro_schema: str, spark_session: SparkSession) -> None:
         self._config = config
         self._source_avro_schema = source_avro_schema
         self._spark_session = spark_session
@@ -61,7 +59,7 @@ class MovieRatingsStream:
             "rating_timestamp",
             "rating_date",
         ]
-        max_late_arriving_events_date = datetime.utcnow().date() - timedelta(
+        max_late_arriving_events_date = datetime.datetime.now(datetime.UTC).date() - datetime.timedelta(
             days=LATE_ARRIVING_EVENTS_THRESHOLD_DAYS
         )
         return (

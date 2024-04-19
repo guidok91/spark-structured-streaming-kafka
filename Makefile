@@ -1,5 +1,5 @@
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,org.apache.spark:spark-avro_2.12:3.4.1,io.delta:delta-core_2.12:2.4.0 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,org.apache.spark:spark-avro_2.12:3.5.1,io.delta:delta-spark_2.12:3.1.0 \
 	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
 	--conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog
 
@@ -8,15 +8,14 @@ help:
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
 
 .PHONY: setup
-setup: # Set up local virtual env for development.
-	pip install --upgrade pip setuptools wheel poetry
+setup: # Set up virtual env with the app and its dependencies.
+	pip install --upgrade pip setuptools wheel poetry==1.8.2
 	poetry config virtualenvs.in-project true --local
 	poetry install
 
 .PHONY: lint
-lint: # Run code linter tools.
-	poetry run black . && \
-	poetry run isort --profile black .
+lint: # Run code linting tools.
+	poetry run pre-commit run --all-files
 
 .PHONY: clean
 clean: # Clean auxiliary files.
@@ -24,11 +23,11 @@ clean: # Clean auxiliary files.
 	touch checkpoint/.gitkeep
 
 .PHONY: kafka-up
-kafka-up: # Spin up local Kafka instance with Docker. 
+kafka-up: # Spin up local Kafka instance with Docker.
 	docker-compose up -d
 
 .PHONY: kafka-down
-kafka-down: # Tear down local Kafka instance. 
+kafka-down: # Tear down local Kafka instance.
 	docker-compose down
 
 .PHONY: kafka-create-topic
@@ -52,17 +51,17 @@ kafka-read-test-events: # Read and display local test events.
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
-.PHONY: 
+.PHONY:
 pyspark: # Run local pyspark console.
 	poetry run pyspark \
 	$(SPARK_ARGS)
 
-.PHONY: 
+.PHONY:
 spark-sql: # Run local spark sql console.
 	poetry run spark-sql \
 	$(SPARK_ARGS)
 
-.PHONY: 
+.PHONY:
 create-sink-table: # Create sink Delta table locally.
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
@@ -77,19 +76,19 @@ create-sink-table: # Create sink Delta table locally.
 	USING DELTA \
 	PARTITIONED BY (rating_date DATE)"
 
-.PHONY: 
+.PHONY:
 streaming-app-run: # Run Spark Structured streaming app locally.
 	poetry run spark-submit \
 	$(SPARK_ARGS) \
 	movie_ratings_streaming/entrypoint.py
 
-.PHONY: 
+.PHONY:
 vacuum: # Run Delta vacuum command on the sink table.
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
 	-e "VACUUM movie_ratings RETAIN 168 HOURS"
 
-.PHONY: 
+.PHONY:
 compact-small-files: # Run Delta optimize command on the sink table.
 	poetry run spark-sql \
 	$(SPARK_ARGS) \

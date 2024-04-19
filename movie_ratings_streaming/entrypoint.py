@@ -8,9 +8,7 @@ if __name__ == "__main__":
     source_avro_schema = read_source_avro_schema()
 
     spark_session = (
-        SparkSession.builder.config(
-            "spark.sql.sources.partitionOverwriteMode", "dynamic"
-        )
+        SparkSession.builder.config("spark.sql.sources.partitionOverwriteMode", "dynamic")
         .enableHiveSupport()
         .getOrCreate()
     )

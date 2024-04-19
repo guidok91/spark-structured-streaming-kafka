@@ -12,7 +12,7 @@ from confluent_kafka.schema_registry.avro import AvroSerializer
 from movie_ratings_streaming.config.config import read_config, read_source_avro_schema
 
 
-def acked(err, msg):
+def acked(err, msg):  # type: ignore
     if err is not None:
         logging.error(f"Failed to deliver message: {msg.value()}: {err}")
     else:
@@ -28,9 +28,7 @@ if __name__ == "__main__":
     topic = config["kafka"]["subscribe"]
 
     avro_serializer = AvroSerializer(
-        schema_registry_client=SchemaRegistryClient(
-            {"url": config["kafka"]["schema.registry.url"]}
-        ),
+        schema_registry_client=SchemaRegistryClient({"url": config["kafka"]["schema.registry.url"]}),
         schema_str=source_avro_schema,
     )
     producer = SerializingProducer(

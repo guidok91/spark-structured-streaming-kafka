@@ -1,0 +1,37 @@
+repos:
+  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: black movie_ratings_streaming
+        language: system
+        types:
+          - python
+        pass_filenames: false
+      - id: isort
+        name: isort
+        entry: isort movie_ratings_streaming
+        language: system
+        types:
+          - python
+        pass_filenames: false
+      - id: ruff
+        name: ruff
+        entry: ruff movie_ratings_streaming
+        language: system
+        types:
+          - python
+        pass_filenames: false
+      - id: mypy
+        name: mypy
+        entry: mypy movie_ratings_streaming
+        language: system
+        types:
+          - python
+        pass_filenames: false

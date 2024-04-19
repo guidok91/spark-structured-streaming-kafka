@@ -2,9 +2,7 @@ import os
 from configparser import ConfigParser
 
 CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
-SOURCE_AVRO_SCHEMA_PATH = os.path.join(
-    os.path.dirname(__file__), "movie-ratings-avro-schema.avsc"
-)
+SOURCE_AVRO_SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "movie-ratings-avro-schema.avsc")
 
 
 def read_config() -> dict:
