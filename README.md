@@ -41,6 +41,10 @@ $ make pyspark
 ```
 
 ## Table internal maintenance
-The streaming microbatches produce lots of small files in the table.
+The streaming microbatches produce lots of small files in the target table. This is not optimal for subsequent reads.
 
-In order to compact these files, auto compaction is enabled on Spark session.
+In order to tackle this issue, the following properties are enabled on the Spark session:
+- Auto compaction: to periodically merge small files into bigger ones automatically.
+- Optimized writes: to write bigger sized files automatically.
+
+More information can be found on [the Delta docs](https://docs.delta.io/latest/optimizations-oss.html).

@@ -11,6 +11,7 @@ if __name__ == "__main__":
         SparkSession.builder.appName("Movie ratings streaming data pipeline")
         .config("spark.sql.sources.partitionOverwriteMode", "dynamic")
         .config("spark.databricks.delta.autoCompact.enabled", "true")
+        .config("spark.databricks.delta.optimizeWrite.enabled", "true")
         .enableHiveSupport()
         .getOrCreate()
     )
