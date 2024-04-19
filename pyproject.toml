@@ -1,23 +1,63 @@
 [tool.poetry]
 name = "movie-ratings-streaming"
-version = "0.1.1"
-description = "Spark Structured Streaming + Kafka demo app"
+version = "0.1.0"
+description = "Spark Structured Streaming data pipeline that processes movie ratings data in real-time"
 authors = ["Guido Kosloff Gancedo <guidokosloff@gmail.com>"]
 readme = "README.md"
-packages = [{include = "movie_ratings_streaming"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
+pyspark = "3.5.1"
+delta-spark = "3.1.0"
 
 [tool.poetry.group.dev.dependencies]
-pyspark = "3.4.1"
-delta-spark = "2.4.0"
-black = "^23.7.0"
-isort = "^5.12.0"
-confluent-kafka = "^2.2.0"
+black = "^24.4.0"
+ruff = "^0.4.1"
+mypy = "^1.9.0"
+isort = "^5.13.2"
+confluent-kafka = "^2.3.0"
 requests = "^2.31.0"
-fastavro = "^1.8.2"
+fastavro = "^1.9.4"
+pre-commit = "^3.7.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.mypy_cache
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.run]
+branch = true
+source = ["movies_etl"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.ruff]
+line-length = 120

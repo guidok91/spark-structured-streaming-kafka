@@ -1,14 +1,14 @@
 # Spark Structured Streaming Demo
-[Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) demo app (PySpark).
+[Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) data pipeline that processes movie ratings data in real-time.
 
-Consumes movie rating events in real-time from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
+Consumes events from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
 
 The pipeline handles updates and duplicate events by merging to the destination table based on the `event_id`.
 
 Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
 
 ## Data Architecture
-![data architecture](https://user-images.githubusercontent.com/38698125/209481709-08c7a921-553a-4cd5-9327-055bcb23b1d5.png)
+![data architecture](https://github.com/guidok91/spark-structured-streaming-kafka/assets/38698125/1d77dfe9-0cad-41c6-addf-01dca3bf1ba8)
 
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
@@ -30,7 +30,7 @@ On a separate console, you can check the output dataset by running:
 ```python
 $ make pyspark
 >>> df = spark.read.table("movie_ratings")
->>> df.show()                                                                   
+>>> df.show()
 +--------------------+--------------------+------+-----------+----------------+-----------+
 |             user_id|            movie_id|rating|is_approved|rating_timestamp|rating_date|
 +--------------------+--------------------+------+-----------+----------------+-----------+
