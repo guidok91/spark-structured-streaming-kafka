@@ -8,7 +8,7 @@ The pipeline handles updates and duplicate events by merging to the destination 
 Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
 
 ## Data Architecture
-![data architecture](https://github.com/guidok91/spark-structured-streaming-kafka/assets/38698125/1d77dfe9-0cad-41c6-addf-01dca3bf1ba8)
+![data architecture](https://github.com/guidok91/spark-structured-streaming-kafka/assets/38698125/e353751e-55f5-46fd-aa5d-3d8501f6e4f0)
 
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
@@ -40,11 +40,11 @@ $ make pyspark
 +--------------------+--------------------+------+-----------+----------------+-----------+
 ```
 
-## Table maintenance
-The streaming microbatches produce:
-- Lots of small files in the table.
-- Constant new Delta table versions.
+## Table internal maintenance
+The streaming microbatches produce lots of small files in the target table. This is not optimal for subsequent reads.
 
-Therefore, we can periodically run these two maintenance processes to mitigate the issues above:
-- `make compact-small-files`
-- `make vacuum`
+In order to tackle this issue, the following properties are enabled on the Spark session:
+- Auto compaction: to periodically merge small files into bigger ones automatically.
+- Optimized writes: to write bigger sized files automatically.
+
+More information can be found on [the Delta docs](https://docs.delta.io/latest/optimizations-oss.html).

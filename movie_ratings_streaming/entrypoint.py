@@ -8,7 +8,10 @@ if __name__ == "__main__":
     source_avro_schema = read_source_avro_schema()
 
     spark_session = (
-        SparkSession.builder.config("spark.sql.sources.partitionOverwriteMode", "dynamic")
+        SparkSession.builder.appName("Movie ratings streaming data pipeline")
+        .config("spark.sql.sources.partitionOverwriteMode", "dynamic")
+        .config("spark.databricks.delta.autoCompact.enabled", "true")
+        .config("spark.databricks.delta.optimizeWrite.enabled", "true")
         .enableHiveSupport()
         .getOrCreate()
     )
