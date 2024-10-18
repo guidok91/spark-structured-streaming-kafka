@@ -1,24 +1,24 @@
 [tool.poetry]
 name = "movie-ratings-streaming"
-version = "0.1.0"
+version = "0.1.1"
 description = "Spark Structured Streaming data pipeline that processes movie ratings data in real-time"
 authors = ["Guido Kosloff Gancedo <guidokosloff@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
-pyspark = "3.5.1"
-delta-spark = "3.1.0"
+python = "~3.12"
+pyspark = "~3.5.3"
+delta-spark = "~3.2.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.0"
-ruff = "^0.4.1"
-mypy = "^1.9.0"
-isort = "^5.13.2"
-confluent-kafka = "^2.3.0"
-requests = "^2.31.0"
-fastavro = "^1.9.4"
-pre-commit = "^3.7.0"
+black = "~24.10.0"
+ruff = "~0.7.0"
+mypy = "~1.12.0"
+isort = "~5.13.2"
+confluent-kafka = "~2.6.0"
+requests = "~2.32.3"
+fastavro = "~1.9.7"
+pre-commit = "~4.0.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -26,7 +26,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-target-version = ['py311']
+target-version = ['py312']
 include = '\.pyi?$'
 exclude = '''
 (
