@@ -65,6 +65,14 @@ ipython_config.py
 # pyenv
 .python-version
 
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ruff
+.ruff_cache
+
 # Environments
 .env
 .venv
@@ -81,4 +89,6 @@ metastore_db/
 checkpoint
 !checkpoint/.gitkeep
 
+# Spark
 spark-warehouse
+data-lake-dev

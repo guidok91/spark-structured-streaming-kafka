@@ -1,7 +1,8 @@
 POETRY_VERSION=1.8.4
 DELTA_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('delta-spark'))")
+SPARK_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,org.apache.spark:spark-avro_2.12:3.5.1,io.delta:delta-spark_2.12:$(DELTA_VERSION) \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:$(SPARK_VERSION),org.apache.spark:spark-avro_2.12:$(SPARK_VERSION),io.delta:delta-spark_2.12:$(DELTA_VERSION) \
 	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
 	--conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog
 
@@ -21,7 +22,8 @@ lint: # Run code linting tools.
 
 .PHONY: clean
 clean: # Clean auxiliary files.
-	rm -rf *.egg-info spark-warehouse metastore_db derby.log checkpoint/* checkpoint/.[!.]*
+	rm -rf *.egg-info spark-warehouse metastore_db derby.log checkpoint/* checkpoint/.[!.]* .mypy_cache .ruff_cache data-lake-dev
+	find . | grep -E "__pycache__" | xargs rm -rf
 	touch checkpoint/.gitkeep
 
 .PHONY: kafka-up
@@ -59,11 +61,6 @@ pyspark: # Run local pyspark console.
 	$(SPARK_ARGS)
 
 .PHONY:
-spark-sql: # Run local spark sql console.
-	poetry run spark-sql \
-	$(SPARK_ARGS)
-
-.PHONY:
 create-sink-table: # Create sink Delta table locally.
 	poetry run spark-sql \
 	$(SPARK_ARGS) \
@@ -76,6 +73,7 @@ create-sink-table: # Create sink Delta table locally.
 		rating_timestamp BIGINT \
 	) \
 	USING DELTA \
+	LOCATION 'data-lake-dev/movie_ratings' \
 	PARTITIONED BY (rating_date DATE)"
 
 .PHONY:
