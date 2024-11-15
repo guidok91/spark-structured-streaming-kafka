@@ -71,21 +71,22 @@ class MovieRatingsStream:
         )
 
     def _write_stream(self, df: DataFrame) -> None:
-        checkpoint_dir = self._config["stream"]["checkpoint_dir"]
+        checkpoint_path = self._config["stream"]["checkpoint_path"]
         output_mode = self._config["stream"]["output_mode"]
 
         (
             df.writeStream.format("delta")
             .foreachBatch(self._upsert_to_sink)
             .outputMode(output_mode)
-            .option("checkpointLocation", checkpoint_dir)
+            .option("checkpointLocation", checkpoint_path)
             .start()
             .awaitTermination()
         )
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
-        sink_table_name = self._config["stream"]["sink_table"]
-        sink_table = DeltaTable.forName(self._spark_session, sink_table_name)
+        output_path = self._config["stream"]["output_path"]
+        self._create_sink_table_if_not_exists(output_path, df)
+        sink_table = DeltaTable.forPath(self._spark_session, output_path)
 
         (
             sink_table.alias("existing")
@@ -97,3 +98,7 @@ class MovieRatingsStream:
             .whenNotMatchedInsertAll()
             .execute()
         )
+
+    def _create_sink_table_if_not_exists(self, output_path: str, df: DataFrame) -> None:
+        if not DeltaTable.isDeltaTable(self._spark_session, output_path):
+            df.limit(0).write.format("delta").partitionBy(["rating_date"]).save(output_path)

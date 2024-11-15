@@ -8,7 +8,7 @@ The pipeline handles updates and duplicate events by merging to the destination 
 Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
 
 ## Data Architecture
-![data architecture](https://github.com/guidok91/spark-structured-streaming-kafka/assets/38698125/e353751e-55f5-46fd-aa5d-3d8501f6e4f0)
+![data architecture](https://github.com/user-attachments/assets/adea51b9-f5f3-41a6-b623-98982453fd31)
 
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
@@ -23,13 +23,12 @@ Run the following commands in order:
 * `make kafka-produce-test-events` to start writing messages to the topic.
 
 On a separate console, run:
-* `make create-sink-table` to create the destination Delta table.
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
 On a separate console, you can check the output dataset by running:
 ```python
 $ make pyspark
->>> df = spark.read.table("movie_ratings")
+>>> df = spark.read.format("delta").load(path="data-lake-dev/movie_ratings")
 >>> df.show()
 +--------------------+--------------------+------+-----------+----------------+-----------+
 |             user_id|            movie_id|rating|is_approved|rating_timestamp|rating_date|
