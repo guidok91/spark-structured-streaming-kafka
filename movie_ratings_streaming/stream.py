@@ -85,6 +85,7 @@ class MovieRatingsStream:
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
         output_path = self._config["stream"]["output_path"]
+        self._create_sink_table_if_not_exists(output_path, df)
         sink_table = DeltaTable.forPath(self._spark_session, output_path)
 
         (
@@ -97,3 +98,7 @@ class MovieRatingsStream:
             .whenNotMatchedInsertAll()
             .execute()
         )
+
+    def _create_sink_table_if_not_exists(self, output_path: str, df: DataFrame) -> None:
+        if not DeltaTable.isDeltaTable(self._spark_session, output_path):
+            df.limit(0).write.format("delta").partitionBy(["rating_date"]).save(output_path)

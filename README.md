@@ -23,7 +23,6 @@ Run the following commands in order:
 * `make kafka-produce-test-events` to start writing messages to the topic.
 
 On a separate console, run:
-* `make create-sink-table` to create the destination Delta table.
 * `make streaming-app-run` to start the Spark Structured Streaming app.
 
 On a separate console, you can check the output dataset by running:

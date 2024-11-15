@@ -61,22 +61,6 @@ pyspark: # Run local pyspark console.
 	$(SPARK_ARGS)
 
 .PHONY:
-create-sink-table: # Create sink Delta table locally.
-	poetry run spark-sql \
-	$(SPARK_ARGS) \
-	-e "CREATE TABLE movie_ratings ( \
-		event_id STRING, \
-		user_id STRING, \
-		movie_id STRING, \
-		rating FLOAT, \
-		is_approved BOOLEAN, \
-		rating_timestamp BIGINT \
-	) \
-	USING DELTA \
-	LOCATION 'data-lake-dev/movie_ratings' \
-	PARTITIONED BY (rating_date DATE)"
-
-.PHONY:
 streaming-app-run: # Run Spark Structured streaming app locally.
 	poetry run spark-submit \
 	$(SPARK_ARGS) \
