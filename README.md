@@ -15,6 +15,9 @@ We spin up a local Kafka cluster with Schema Registry using a [Docker Compose fi
 
 We install a local Spark Structured Streaming app using Poetry.
 
+## Dependency management
+Dependabot is configured to periodically upgrade repo dependencies. See [dependabot.yml](.github/dependabot.yml).
+
 ## Running instructions
 Run the following commands in order:
 * `make setup` to install the Spark Structured Streaming app on a local Python env.
