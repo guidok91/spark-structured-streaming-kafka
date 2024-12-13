@@ -51,7 +51,7 @@ kafka-read-test-events: # Read and display local test events.
 	docker exec --interactive --tty schema-registry \
 	kafka-avro-console-consumer \
 	--topic movie.ratings.v1 \
-	--bootstrap-server broker:9092 \
+	--bootstrap-server broker:29092 \
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
