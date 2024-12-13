@@ -11,7 +11,7 @@ Late arriving events from more than 5 days ago are discarded (for performance re
 ![data architecture](https://github.com/user-attachments/assets/adea51b9-f5f3-41a6-b623-98982453fd31)
 
 ## Local setup
-We spin up a local Kafka cluster with Schema Registry using a [Docker Compose file provided by Confluent](https://developer.confluent.io/tutorials/kafka-console-consumer-producer-avro/kafka.html#get-confluent-platform).
+We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/7.8.0-post/cp-all-in-one-community/docker-compose.yml).
 
 We install a local Spark Structured Streaming app using Poetry.
 

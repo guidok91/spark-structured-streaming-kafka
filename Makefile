@@ -1,4 +1,4 @@
-POETRY_VERSION=1.8.4
+POETRY_VERSION=1.8.5
 DELTA_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('delta-spark'))")
 SPARK_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \

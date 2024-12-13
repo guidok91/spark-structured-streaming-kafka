@@ -1,9 +1,8 @@
 ---
-version: '3'
 
 services:
   broker:
-    image: confluentinc/cp-kafka:7.7.1
+    image: confluentinc/cp-kafka:7.8.0
     hostname: broker
     container_name: broker
     ports:
@@ -26,7 +25,7 @@ services:
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.7.1
+    image: confluentinc/cp-schema-registry:7.8.0
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
