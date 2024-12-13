@@ -1,12 +1,12 @@
 import logging
-import socket
 import time
 import uuid
 from random import uniform
 
-from confluent_kafka import SerializingProducer
+from confluent_kafka import Producer
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroSerializer
+from confluent_kafka.serialization import MessageField, SerializationContext
 
 from movie_ratings_streaming.config.config import read_config, read_source_avro_schema
 
@@ -30,24 +30,21 @@ if __name__ == "__main__":
         schema_registry_client=SchemaRegistryClient({"url": config["kafka"]["schema.registry.url"]}),
         schema_str=source_avro_schema,
     )
-    producer = SerializingProducer(
-        {
-            "bootstrap.servers": config["kafka"]["kafka.bootstrap.servers"],
-            "client.id": socket.gethostname(),
-            "value.serializer": avro_serializer,
-        }
-    )
+    producer = Producer({"bootstrap.servers": config["kafka"]["kafka.bootstrap.servers"]})
 
     while True:
         producer.produce(
             topic=topic,
-            value={
-                "event_id": str(uuid.uuid1()),
-                "user_id": str(uuid.uuid1()),
-                "movie_id": str(uuid.uuid1()),
-                "rating": round(uniform(0, 10), 1),
-                "rating_timestamp": int(time.time()),
-            },
+            value=avro_serializer(
+                {
+                    "event_id": str(uuid.uuid1()),
+                    "user_id": str(uuid.uuid1()),
+                    "movie_id": str(uuid.uuid1()),
+                    "rating": round(uniform(0, 10), 1),
+                    "rating_timestamp": int(time.time()),
+                },
+                SerializationContext(topic, MessageField.VALUE),
+            ),
             on_delivery=acked,
         )
         producer.poll()

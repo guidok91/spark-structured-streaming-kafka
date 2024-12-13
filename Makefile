@@ -1,4 +1,4 @@
-POETRY_VERSION=1.8.4
+POETRY_VERSION=1.8.5
 DELTA_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('delta-spark'))")
 SPARK_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \
@@ -51,7 +51,7 @@ kafka-read-test-events: # Read and display local test events.
 	docker exec --interactive --tty schema-registry \
 	kafka-avro-console-consumer \
 	--topic movie.ratings.v1 \
-	--bootstrap-server broker:9092 \
+	--bootstrap-server broker:29092 \
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
