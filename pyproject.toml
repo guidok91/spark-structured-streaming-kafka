@@ -17,7 +17,7 @@ mypy = "~1.13.0"
 isort = "~5.13.2"
 confluent-kafka = "~2.6.1"
 requests = "~2.32.3"
-fastavro = "~1.9.7"
+fastavro = "~1.10.0"
 pre-commit = "~4.0.1"
 
 [build-system]
