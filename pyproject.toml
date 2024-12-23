@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-pyspark = "~3.5.3"
+pyspark = "~3.5.4"
 delta-spark = "~3.2.1"
 
 [tool.poetry.group.dev.dependencies]
