@@ -3,16 +3,10 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "00:00"
-      timezone: "UTC"
+      interval: "monthly"
 
   # docker-compose is not supported by dependabot yet
   # - package-ecosystem: "docker"
   #   directory: "/"
   #   schedule:
-  #     interval: "weekly"
-  #     day: "monday"
-  #     time: "00:00"
-  #     timezone: "UTC"
+  #     interval: "monthly"
