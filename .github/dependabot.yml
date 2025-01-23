@@ -4,9 +4,17 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
   # docker-compose is not supported by dependabot yet
   # - package-ecosystem: "docker"
   #   directory: "/"
   #   schedule:
   #     interval: "monthly"
+    # groups:
+    #   all-dependencies:
+    #     patterns:
+    #       - "*"
