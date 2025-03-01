@@ -7,15 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.12"
-pyspark = "~3.5.4"
+pyspark = "~3.5.5"
 delta-spark = "~3.3.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "~25.1.0"
-ruff = "~0.9.4"
-mypy = "~1.14.1"
-isort = "~6.0.0"
-confluent-kafka = {extras = ["avro", "schemaregistry"], version ="~2.8.0"}
+ruff = "~0.9.9"
+mypy = "~1.15.0"
+isort = "~6.0.1"
+confluent-kafka = {extras = ["avro", "schemaregistry"], version ="~2.8.2"}
 requests = "~2.32.3"
 fastavro = "~1.10.0"
 pre-commit = "~4.1.0"
