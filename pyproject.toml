@@ -1,54 +1,41 @@
-[tool.poetry]
+[project]
 name = "movie-ratings-streaming"
 version = "0.2.0"
 description = "Spark Structured Streaming data pipeline that processes movie ratings data in real-time"
-authors = ["Guido Kosloff Gancedo <guidokosloff@gmail.com>"]
+authors = [{ name = "Guido Kosloff Gancedo", email = "guidokosloff@gmail.com" }]
 readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pyspark~=3.5.4",
+    "delta-spark~=3.3.0",
+]
 
-[tool.poetry.dependencies]
-python = "~3.12"
-pyspark = "~3.5.4"
-delta-spark = "~3.3.0"
-
-[tool.poetry.group.dev.dependencies]
-black = "~25.1.0"
-ruff = "~0.9.4"
-mypy = "~1.14.1"
-isort = "~6.0.0"
-confluent-kafka = {extras = ["avro", "schemaregistry"], version ="~2.8.0"}
-requests = "~2.32.3"
-fastavro = "~1.10.0"
-pre-commit = "~4.1.0"
+[dependency-groups]
+dev = [
+    "black~=25.1.0",
+    "ruff~=0.9.4",
+    "mypy~=1.14.1",
+    "isort~=6.0.0",
+    "confluent-kafka[avro, schemaregistry]~=2.8.0",
+    "requests~=2.32.3",
+    "fastavro~=1.10.0",
+    "pre-commit~=4.1.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 120
 target-version = ['py312']
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs
-    | \.git
-    | \.mypy_cache
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-)
-'''
 
 [tool.isort]
 profile = "black"
 
 [tool.coverage.run]
 branch = true
-source = ["movies_etl"]
+source = ["movie_ratings_streaming"]
 
 [tool.coverage.report]
 show_missing = true

@@ -13,7 +13,7 @@ Late arriving events from more than 5 days ago are discarded (for performance re
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/7.8.0-post/cp-all-in-one-community/docker-compose.yml).
 
-We install a local Spark Structured Streaming app using Poetry.
+We install a local Spark Structured Streaming app using uv.
 
 ## Dependency management
 Dependabot is configured to periodically upgrade repo dependencies. See [dependabot.yml](.github/dependabot.yml).
