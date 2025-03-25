@@ -1,5 +1,6 @@
-DELTA_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('delta-spark'))")
-SPARK_VERSION=$(shell poetry run python -c "from importlib.metadata import version; print(version('pyspark'))")
+UV_VERSION=0.6.9
+DELTA_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('delta-spark'))")
+SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \
 	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:$(SPARK_VERSION),org.apache.spark:spark-avro_2.12:$(SPARK_VERSION),io.delta:delta-spark_2.12:$(DELTA_VERSION) \
 	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
@@ -11,13 +12,12 @@ help:
 
 .PHONY: setup
 setup: # Set up virtual env with the app and its dependencies.
-	curl -sSL https://install.python-poetry.org | python3 -
-	poetry config virtualenvs.in-project true --local
-	poetry install
+	curl -LsSf https://astral.sh/uv/$(UV_VERSION)/install.sh | sh
+	uv sync
 
 .PHONY: lint
 lint: # Run code linting tools.
-	poetry run pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 .PHONY: clean
 clean: # Clean auxiliary files.
@@ -43,7 +43,7 @@ kafka-create-topic: # Create Kafka topic for local dev.
 
 .PHONY: kafka-produce-test-events
 kafka-produce-test-events: # Produce dummy test events locally.
-	poetry run python movie_ratings_streaming/produce_test_events.py
+	uv run python movie_ratings_streaming/produce_test_events.py
 
 .PHONY: kafka-read-test-events
 kafka-read-test-events: # Read and display local test events.
@@ -56,11 +56,11 @@ kafka-read-test-events: # Read and display local test events.
 
 .PHONY:
 pyspark: # Run local pyspark console.
-	poetry run pyspark \
+	uv run pyspark \
 	$(SPARK_ARGS)
 
 .PHONY:
 streaming-app-run: # Run Spark Structured streaming app locally.
-	poetry run spark-submit \
+	uv run spark-submit \
 	$(SPARK_ARGS) \
 	movie_ratings_streaming/entrypoint.py
