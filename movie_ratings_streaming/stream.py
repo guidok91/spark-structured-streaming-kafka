@@ -92,7 +92,8 @@ class MovieRatingsStream:
             sink_table.alias("existing")
             .merge(
                 source=df.alias("incoming"),
-                condition=f"existing.event_id = incoming.event_id AND existing.rating_date >= DATE_ADD(CURRENT_DATE(), -{LATE_ARRIVING_EVENTS_THRESHOLD_DAYS})",
+                condition=f"""existing.event_id = incoming.event_id
+                AND existing.rating_date >= DATE_ADD(CURRENT_DATE(), -{LATE_ARRIVING_EVENTS_THRESHOLD_DAYS})""",
             )
             .whenMatchedUpdateAll()
             .whenNotMatchedInsertAll()

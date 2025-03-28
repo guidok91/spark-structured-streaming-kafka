@@ -7,31 +7,18 @@ repos:
       - id: trailing-whitespace
   - repo: local
     hooks:
-      - id: black
-        name: black
-        entry: black movie_ratings_streaming
+      - id: ruff-lint
+        name: ruff-lint
+        entry: bash -c 'set +e; ruff check movie_ratings_streaming; ruff check --fix movie_ratings_streaming; exit $(($? != 0))'
         language: system
-        types:
-          - python
         pass_filenames: false
-      - id: isort
-        name: isort
-        entry: isort movie_ratings_streaming
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format movie_ratings_streaming
         language: system
-        types:
-          - python
-        pass_filenames: false
-      - id: ruff
-        name: ruff
-        entry: ruff check movie_ratings_streaming
-        language: system
-        types:
-          - python
         pass_filenames: false
       - id: mypy
         name: mypy
         entry: mypy movie_ratings_streaming
         language: system
-        types:
-          - python
         pass_filenames: false
