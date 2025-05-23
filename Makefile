@@ -1,10 +1,12 @@
 UV_VERSION=0.6.9
-DELTA_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('delta-spark'))")
+ICEBERG_VERSION=1.9.0
 SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:$(SPARK_VERSION),org.apache.spark:spark-avro_2.12:$(SPARK_VERSION),io.delta:delta-spark_2.12:$(DELTA_VERSION) \
-	--conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
-	--conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:$(SPARK_VERSION),org.apache.spark:spark-avro_2.12:$(SPARK_VERSION),org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:$(ICEBERG_VERSION) \
+    --conf spark.sql.defaultCatalog=local \
+    --conf spark.sql.catalog.local=org.apache.iceberg.spark.SparkCatalog \
+    --conf spark.sql.catalog.local.type=hadoop \
+    --conf spark.sql.catalog.local.warehouse=data-lake-dev
 
 .PHONY: help
 help:
