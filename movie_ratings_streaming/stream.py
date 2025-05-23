@@ -1,8 +1,7 @@
 import datetime
 
-from delta.tables import DeltaTable
+from pyspark.sql import Catalog, DataFrame
 from pyspark.sql.avro.functions import from_avro
-from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import col, from_unixtime, lit, to_date
 from pyspark.sql.session import SparkSession
 
@@ -10,7 +9,7 @@ LATE_ARRIVING_EVENTS_THRESHOLD_DAYS = 5
 
 
 class MovieRatingsStream:
-    """Reads streaming data from a Kafka topic, applies transformation and saves to a Delta sink."""
+    """Reads streaming data from a Kafka topic, applies transformation and saves to an Iceberg sink."""
 
     def __init__(self, config: dict, source_avro_schema: str, spark_session: SparkSession) -> None:
         self._config = config
@@ -72,34 +71,32 @@ class MovieRatingsStream:
 
     def _write_stream(self, df: DataFrame) -> None:
         checkpoint_path = self._config["stream"]["checkpoint_path"]
-        output_mode = self._config["stream"]["output_mode"]
+        output_table = self._config["stream"]["output_table"]
+        trigger_processing_time = self._config["stream"]["trigger_processing_time"]
+        self._create_sink_table_if_not_exists(output_table, df)
 
         (
-            df.writeStream.format("delta")
-            .foreachBatch(self._upsert_to_sink)
-            .outputMode(output_mode)
+            df.writeStream.format("iceberg")
+            .trigger(processingTime=trigger_processing_time)
+            .option("fanout-enabled", "true")
             .option("checkpointLocation", checkpoint_path)
+            .foreachBatch(self._upsert_to_sink)
             .start()
             .awaitTermination()
         )
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
-        output_path = self._config["stream"]["output_path"]
-        self._create_sink_table_if_not_exists(output_path, df)
-        sink_table = DeltaTable.forPath(self._spark_session, output_path)
+        df.createOrReplaceGlobalTempView("incoming")
+        self._spark_session.sql(f"""
+            MERGE INTO {self._config["stream"]["output_table"]} existing
+            USING (SELECT * FROM global_temp.incoming) as incoming
+            ON existing.event_id = incoming.event_id
+                AND existing.rating_date >= DATE_ADD(CURRENT_DATE(), -{LATE_ARRIVING_EVENTS_THRESHOLD_DAYS})
+            WHEN MATCHED THEN UPDATE SET *
+            WHEN NOT MATCHED THEN INSERT *
+        """)
 
-        (
-            sink_table.alias("existing")
-            .merge(
-                source=df.alias("incoming"),
-                condition=f"""existing.event_id = incoming.event_id
-                AND existing.rating_date >= DATE_ADD(CURRENT_DATE(), -{LATE_ARRIVING_EVENTS_THRESHOLD_DAYS})""",
-            )
-            .whenMatchedUpdateAll()
-            .whenNotMatchedInsertAll()
-            .execute()
-        )
-
-    def _create_sink_table_if_not_exists(self, output_path: str, df: DataFrame) -> None:
-        if not DeltaTable.isDeltaTable(self._spark_session, output_path):
-            df.limit(0).write.format("delta").partitionBy(["rating_date"]).save(output_path)
+    def _create_sink_table_if_not_exists(self, output_table: str, df: DataFrame) -> None:
+        if not Catalog(self._spark_session).tableExists(tableName=output_table):
+            empty_batch_df = self._spark_session.createDataFrame([], df.schema)
+            empty_batch_df.writeTo(output_table).partitionedBy(col("rating_date")).create()

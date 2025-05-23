@@ -1,14 +1,14 @@
 # Spark Structured Streaming Demo
 [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) data pipeline that processes movie ratings data in real-time.
 
-Consumes events from a Kafka topic in Avro, transforms and writes to a [Delta](https://delta.io/) table.
+Consumes events from a Kafka topic in Avro, transforms and writes to an [Apache Iceberg](https://iceberg.apache.org/) table.
 
 The pipeline handles updates and duplicate events by merging to the destination table based on the `event_id`.
 
 Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
 
 ## Data Architecture
-![data architecture](https://github.com/user-attachments/assets/adea51b9-f5f3-41a6-b623-98982453fd31)
+<img width="1731" alt="image" src="https://github.com/user-attachments/assets/79551b02-e192-4203-9d6b-2ce07253056f" />
 
 ## Local setup
 We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/7.8.0-post/cp-all-in-one-community/docker-compose.yml).
@@ -31,22 +31,19 @@ On a separate console, run:
 On a separate console, you can check the output dataset by running:
 ```python
 $ make pyspark
->>> df = spark.read.format("delta").load(path="data-lake-dev/movie_ratings")
+>>> df = spark.read.table("movie_ratings")
 >>> df.show()
-+--------------------+--------------------+------+-----------+----------------+-----------+
-|             user_id|            movie_id|rating|is_approved|rating_timestamp|rating_date|
-+--------------------+--------------------+------+-----------+----------------+-----------+
-|0c67b5fe-8cf7-11e...|0c67b6b2-8cf7-11e...|   1.8|      false|      1672933621| 2023-01-05|
-|601f90a8-8cf8-11e...|601f9152-8cf8-11e...|   9.5|       true|      1672934191| 2023-01-05|
-|6249323a-8cf8-11e...|624932da-8cf8-11e...|   3.1|      false|      1672934194| 2023-01-05|
-+--------------------+--------------------+------+-----------+----------------+-----------+
++--------------------+--------------------+--------------------+------+-----------+----------------+-----------+
+|            event_id|             user_id|            movie_id|rating|is_approved|rating_timestamp|rating_date|
++--------------------+--------------------+--------------------+------+-----------+----------------+-----------+
+|a41847d0-37de-11f...|a418482a-37de-11f...|a418483e-37de-11f...|   1.8|      false|      1748008982| 2025-05-23|
+|a46519c0-37de-11f...|a4651a42-37de-11f...|a4651a60-37de-11f...|   6.9|      false|      1748008982| 2025-05-23|
+|a4c15a50-37de-11f...|a4c15ac8-37de-11f...|a4c15ae6-37de-11f...|   5.0|      false|      1748008983| 2025-05-23|
+|a79b2b98-37de-11f...|a79b2c10-37de-11f...|a79b2c2e-37de-11f...|   4.0|      false|      1748008988| 2025-05-23|
++--------------------+--------------------+--------------------+------+-----------+----------------+-----------+
 ```
 
 ## Table internal maintenance
-The streaming microbatches produce lots of small files in the target table. This is not optimal for subsequent reads.
+The streaming microbatches can produce many small files and constant table snapshots.
 
-In order to tackle this issue, the following properties are enabled on the Spark session:
-- Auto compaction: to periodically merge small files into bigger ones automatically.
-- Optimized writes: to write bigger sized files automatically.
-
-More information can be found on [the Delta docs](https://docs.delta.io/latest/optimizations-oss.html).
+In order to tackle these issues, the recommended Iceberg table maintenance operations can be used, [see doc](https://iceberg.apache.org/docs/1.4.0/spark-structured-streaming/#maintenance-for-streaming-tables).
