@@ -11,7 +11,7 @@ Late arriving events from more than 5 days ago are discarded (for performance re
 <img width="1731" alt="image" src="https://github.com/user-attachments/assets/79551b02-e192-4203-9d6b-2ce07253056f" />
 
 ## Local setup
-We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/7.8.0-post/cp-all-in-one-community/docker-compose.yml).
+We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/8.0.0-post/cp-all-in-one-community/docker-compose.yml).
 
 We install a local Spark Structured Streaming app using uv.
 
@@ -46,4 +46,4 @@ $ make pyspark
 ## Table internal maintenance
 The streaming microbatches can produce many small files and constant table snapshots.
 
-In order to tackle these issues, the recommended Iceberg table maintenance operations can be used, [see doc](https://iceberg.apache.org/docs/1.4.0/spark-structured-streaming/#maintenance-for-streaming-tables).
+In order to tackle these issues, the recommended Iceberg table maintenance operations can be used, [see doc](https://iceberg.apache.org/docs/latest/spark-structured-streaming/#maintenance-for-streaming-tables).
