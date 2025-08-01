@@ -46,4 +46,4 @@ $ make pyspark
 ## Table internal maintenance
 The streaming microbatches can produce many small files and constant table snapshots.
 
-In order to tackle these issues, the recommended Iceberg table maintenance operations can be used, [see doc](https://iceberg.apache.org/docs/1.4.0/spark-structured-streaming/#maintenance-for-streaming-tables).
+In order to tackle these issues, the recommended Iceberg table maintenance operations can be used, [see doc](https://iceberg.apache.org/docs/latest/spark-structured-streaming/#maintenance-for-streaming-tables).
