@@ -1,5 +1,5 @@
-UV_VERSION=0.7.11
-ICEBERG_VERSION=1.9.2
+UV_VERSION=0.9.7
+ICEBERG_VERSION=1.10.0
 SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 SPARK_ARGS = --master local[*] \
 	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:$(SPARK_VERSION),org.apache.spark:spark-avro_2.12:$(SPARK_VERSION),org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:$(ICEBERG_VERSION) \
