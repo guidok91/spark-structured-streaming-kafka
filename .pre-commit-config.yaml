@@ -9,12 +9,12 @@ repos:
     hooks:
       - id: ruff-lint
         name: ruff-lint
-        entry: bash -c 'set +e; ruff check movie_ratings_streaming; ruff check --fix movie_ratings_streaming; exit $(($? != 0))'
+        entry: ruff check movie_ratings_streaming
         language: system
         pass_filenames: false
       - id: ruff-format
         name: ruff-format
-        entry: ruff format movie_ratings_streaming
+        entry: ruff format --exit-non-zero-on-format movie_ratings_streaming
         language: system
         pass_filenames: false
       - id: mypy
