@@ -5,8 +5,6 @@ Consumes events from a Kafka topic in Avro, transforms and writes to an [Apache 
 
 The pipeline handles updates and duplicate events by merging to the destination table based on the `event_id`.
 
-Late arriving events from more than 5 days ago are discarded (for performance reasons in the merge - to leverage partitioning and avoid full scans).
-
 ## Data Architecture
 <img width="1731" alt="image" src="https://github.com/user-attachments/assets/79551b02-e192-4203-9d6b-2ce07253056f" />
 
