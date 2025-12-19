@@ -1,5 +1,5 @@
 export TZ=UTC
-export UV_VERSION=0.9.7
+export UV_VERSION=0.9.18
 export ICEBERG_VERSION=1.10.0
 export SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 export SPARK_ARGS = --master local[*] \

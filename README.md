@@ -9,7 +9,7 @@ The pipeline handles updates and duplicate events by merging to the destination 
 <img width="1731" alt="image" src="https://github.com/user-attachments/assets/79551b02-e192-4203-9d6b-2ce07253056f" />
 
 ## Local setup
-We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/v8.1.0/cp-all-in-one-community/docker-compose.yml).
+We spin up a local Kafka cluster with Schema Registry based on the [Docker Compose file provided by Confluent](https://github.com/confluentinc/cp-all-in-one/blob/v8.1.1/cp-all-in-one-community/docker-compose.yml).
 
 We install a local Spark Structured Streaming app using uv.
 
