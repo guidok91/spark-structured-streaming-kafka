@@ -65,10 +65,8 @@ ipython_config.py
 # pyenv
 .python-version
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+# ty
+.ty/
 
 # ruff
 .ruff_cache

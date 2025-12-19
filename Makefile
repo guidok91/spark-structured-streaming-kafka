@@ -24,7 +24,7 @@ lint: # Run code linting tools.
 
 .PHONY: clean
 clean: # Clean auxiliary files.
-	rm -rf *.egg-info spark-warehouse metastore_db derby.log checkpoint/* checkpoint/.[!.]* .mypy_cache .ruff_cache data-lake-dev
+	rm -rf *.egg-info spark-warehouse metastore_db derby.log checkpoint/* checkpoint/.[!.]* .ty .ruff_cache data-lake-dev
 	find . | grep -E "__pycache__" | xargs rm -rf
 	touch checkpoint/.gitkeep
 

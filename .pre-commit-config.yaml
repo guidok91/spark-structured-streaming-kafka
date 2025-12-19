@@ -17,8 +17,8 @@ repos:
         entry: ruff format --exit-non-zero-on-format movie_ratings_streaming
         language: system
         pass_filenames: false
-      - id: mypy
-        name: mypy
-        entry: mypy movie_ratings_streaming
+      - id: ty
+        name: ty
+        entry: ty check movie_ratings_streaming
         language: system
         pass_filenames: false

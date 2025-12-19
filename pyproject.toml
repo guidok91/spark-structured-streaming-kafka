@@ -12,7 +12,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff~=0.14.4",
-    "mypy~=1.18.2",
+    "ty~=0.0.4",
     "confluent-kafka[avro, schemaregistry]~=2.12.1",
     "requests~=2.32.5",
     "fastavro~=1.12.1",
@@ -30,11 +30,8 @@ source = ["movie_ratings_streaming"]
 [tool.coverage.report]
 show_missing = true
 
-[tool.mypy]
-ignore_missing_imports = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+[tool.ty.rules]
+no-matching-overload = "ignore"
 
 [tool.ruff]
 line-length = 120
