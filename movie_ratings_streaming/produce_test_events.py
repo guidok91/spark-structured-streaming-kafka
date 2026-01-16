@@ -47,4 +47,4 @@ if __name__ == "__main__":
             ),
             on_delivery=acked,
         )
-        producer.poll()
+        producer.poll(0)

@@ -4,6 +4,7 @@
 Consumes events from a Kafka topic in Avro, transforms and writes to an [Apache Iceberg](https://iceberg.apache.org/) table.
 
 The pipeline handles updates and duplicate events by merging to the destination table based on the `event_id`.
+
 The output table is partitioned by `days(rating_timestamp)` (leveraging [Iceberg's hidden partitioning](https://iceberg.apache.org/docs/latest/partitioning/) for optimal querying)
 
 ## Data Architecture
