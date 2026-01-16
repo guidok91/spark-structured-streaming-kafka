@@ -1,6 +1,6 @@
 from pyspark.sql import Catalog, DataFrame
 from pyspark.sql.avro.functions import from_avro
-from pyspark.sql.functions import col, from_unixtime, to_date
+from pyspark.sql.functions import col, days
 from pyspark.sql.session import SparkSession
 
 
@@ -51,13 +51,12 @@ class MovieRatingsStream:
             "movie_id",
             "rating",
             "is_approved",
-            "rating_timestamp",
-            "rating_date",
+            "rating_timestamp"
         ]
         return (
             df.dropDuplicates(["event_id"])
             .withColumn("is_approved", col("rating") >= 7)
-            .withColumn("rating_date", to_date(from_unixtime("rating_timestamp")))
+            .withColumn("rating_timestamp", col("rating_timestamp").cast("timestamp"))
             .select(final_fields)
         )
 
@@ -90,4 +89,4 @@ class MovieRatingsStream:
     def _create_sink_table_if_not_exists(self, output_table: str, df: DataFrame) -> None:
         if not Catalog(self._spark_session).tableExists(tableName=output_table):
             empty_batch_df = self._spark_session.createDataFrame([], df.schema)
-            empty_batch_df.writeTo(output_table).partitionedBy(col("rating_date")).create()
+            empty_batch_df.writeTo(output_table).using("iceberg").partitionedBy(days("rating_timestamp")).create()
