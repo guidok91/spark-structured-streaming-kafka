@@ -56,7 +56,6 @@ class MovieRatingsStream:
     def _write_stream(self, df: DataFrame) -> None:
         checkpoint_path = self._config["stream"]["checkpoint_path"]
         trigger_processing_time = self._config["stream"]["trigger_processing_time"]
-        self._create_sink_table_if_not_exists(df)
 
         (
             df.writeStream.format("iceberg")
@@ -70,21 +69,19 @@ class MovieRatingsStream:
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
         output_table = self._config["stream"]["output_table"]
-        (
-            df.alias("source")
-            .mergeInto(
-                table=output_table,
-                condition=col("source.event_id") == col(f"{output_table}.event_id"),
-            )
-            .whenMatched()
-            .updateAll()
-            .whenNotMatched()
-            .insertAll()
-            .merge()
-        )
 
-    def _create_sink_table_if_not_exists(self, df: DataFrame) -> None:
-        output_table = self._config["stream"]["output_table"]
-        if not Catalog(self._spark_session).tableExists(tableName=output_table):
-            empty_batch_df = self._spark_session.createDataFrame([], df.schema)
-            empty_batch_df.writeTo(output_table).using("iceberg").partitionedBy(days("rating_timestamp")).create()
+        if Catalog(self._spark_session).tableExists(tableName=output_table):
+            (
+                df.alias("source")
+                .mergeInto(
+                    table=output_table,
+                    condition=col("source.event_id") == col(f"{output_table}.event_id"),
+                )
+                .whenMatched()
+                .updateAll()
+                .whenNotMatched()
+                .insertAll()
+                .merge()
+            )
+        else:
+            df.writeTo(output_table).using("iceberg").partitionedBy(days("rating_timestamp")).create()
