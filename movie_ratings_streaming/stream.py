@@ -45,14 +45,7 @@ class MovieRatingsStream:
 
     @staticmethod
     def _transform(df: DataFrame) -> DataFrame:
-        final_fields = [
-            "event_id",
-            "user_id",
-            "movie_id",
-            "rating",
-            "is_approved",
-            "rating_timestamp"
-        ]
+        final_fields = ["event_id", "user_id", "movie_id", "rating", "is_approved", "rating_timestamp"]
         return (
             df.dropDuplicates(["event_id"])
             .withColumn("is_approved", col("rating") >= 7)
@@ -62,9 +55,8 @@ class MovieRatingsStream:
 
     def _write_stream(self, df: DataFrame) -> None:
         checkpoint_path = self._config["stream"]["checkpoint_path"]
-        output_table = self._config["stream"]["output_table"]
         trigger_processing_time = self._config["stream"]["trigger_processing_time"]
-        self._create_sink_table_if_not_exists(output_table, df)
+        self._create_sink_table_if_not_exists(df)
 
         (
             df.writeStream.format("iceberg")
@@ -77,16 +69,22 @@ class MovieRatingsStream:
         )
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
-        df.createOrReplaceGlobalTempView("incoming")
-        self._spark_session.sql(f"""
-            MERGE INTO {self._config["stream"]["output_table"]} existing
-            USING (SELECT * FROM global_temp.incoming) as incoming
-            ON existing.event_id = incoming.event_id
-            WHEN MATCHED THEN UPDATE SET *
-            WHEN NOT MATCHED THEN INSERT *
-        """)
+        output_table = self._config["stream"]["output_table"]
+        (
+            df.alias("source")
+            .mergeInto(
+                table=output_table,
+                condition=col("source.event_id") == col(f"{output_table}.event_id"),
+            )
+            .whenMatched()
+            .updateAll()
+            .whenNotMatched()
+            .insertAll()
+            .merge()
+        )
 
-    def _create_sink_table_if_not_exists(self, output_table: str, df: DataFrame) -> None:
+    def _create_sink_table_if_not_exists(self, df: DataFrame) -> None:
+        output_table = self._config["stream"]["output_table"]
         if not Catalog(self._spark_session).tableExists(tableName=output_table):
             empty_batch_df = self._spark_session.createDataFrame([], df.schema)
             empty_batch_df.writeTo(output_table).using("iceberg").partitionedBy(days("rating_timestamp")).create()
