@@ -1,6 +1,6 @@
 export TZ=UTC
-export UV_VERSION=0.9.18
-export ICEBERG_VERSION=1.10.0
+export UV_VERSION=0.9.26
+export ICEBERG_VERSION=1.10.1
 export SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 export SPARK_ARGS = --master local[*] \
 	--packages org.apache.spark:spark-sql-kafka-0-10_2.13:$(SPARK_VERSION),org.apache.spark:spark-avro_2.13:$(SPARK_VERSION),org.apache.iceberg:iceberg-spark-runtime-4.0_2.13:$(ICEBERG_VERSION) \
