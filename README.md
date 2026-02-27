@@ -7,6 +7,12 @@ The pipeline handles updates and duplicate events by merging to the destination 
 
 The output table is partitioned by `days(rating_timestamp)` (leveraging [Iceberg's hidden partitioning](https://iceberg.apache.org/docs/latest/partitioning/) for optimal querying)
 
+- [Data Architecture](#data-architecture)
+- [Local setup](#local-setup)
+- [Dependency management](#dependency-management)
+- [Running instructions](#running-instructions)
+- [Table internal maintenance](#table-internal-maintenance)
+
 ## Data Architecture
 <img width="1731" alt="image" src="https://github.com/user-attachments/assets/79551b02-e192-4203-9d6b-2ce07253056f" />
 
