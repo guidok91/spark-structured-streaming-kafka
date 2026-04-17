@@ -11,7 +11,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ruff~=0.14.13",
+    "ruff~=0.15.4",
     "ty~=0.0.12",
     "confluent-kafka[avro, schemaregistry]~=2.13.0",
     "requests~=2.32.5",
