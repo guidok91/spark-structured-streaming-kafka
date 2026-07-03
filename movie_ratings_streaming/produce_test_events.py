@@ -11,7 +11,7 @@ from confluent_kafka.serialization import MessageField, SerializationContext
 from movie_ratings_streaming.config.config import read_config, read_source_avro_schema
 
 
-def acked(err, msg):  # type: ignore
+def acked(err, msg):
     if err is not None:
         logging.error(f"Failed to deliver message: {msg.value()}: {err}")
     else:

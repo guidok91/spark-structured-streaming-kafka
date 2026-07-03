@@ -1,22 +1,22 @@
 [project]
 name = "movie-ratings-streaming"
-version = "0.3.0"
+version = "0.3.1"
 description = "Spark Structured Streaming data pipeline that processes movie ratings data in real-time"
 authors = [{ name = "Guido Kosloff Gancedo", email = "guidokosloff@gmail.com" }]
 readme = "README.md"
-requires-python = ">=3.13,<3.14"
+requires-python = "~=3.14.0"
 dependencies = [
-    "pyspark~=4.1.1",
+    "pyspark~=4.1.2",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff~=0.14.13",
-    "ty~=0.0.12",
-    "confluent-kafka[avro, schemaregistry]~=2.13.0",
-    "requests~=2.32.5",
-    "fastavro~=1.12.1",
-    "pre-commit~=4.5.1",
+    "ruff~=0.15.20",
+    "ty~=0.0.56",
+    "confluent-kafka[avro, schemaregistry]~=2.15.0",
+    "requests~=2.34.2",
+    "fastavro~=1.12.2",
+    "pre-commit~=4.6.0",
 ]
 
 [build-system]
