@@ -47,8 +47,7 @@ class MovieRatingsStream:
     def _transform(df: DataFrame) -> DataFrame:
         final_fields = ["event_id", "user_id", "movie_id", "rating", "is_approved", "rating_timestamp"]
         return (
-            df.dropDuplicates(["event_id"])
-            .withColumn("is_approved", col("rating") >= 7)
+            df.withColumn("is_approved", col("rating") >= 7)
             .withColumn("rating_timestamp", col("rating_timestamp").cast("timestamp"))
             .select(final_fields)
         )
@@ -60,7 +59,6 @@ class MovieRatingsStream:
         (
             df.writeStream.format("iceberg")
             .trigger(processingTime=trigger_processing_time)
-            .option("fanout-enabled", "true")
             .option("checkpointLocation", checkpoint_path)
             .foreachBatch(self._upsert_to_sink)
             .start()
@@ -69,6 +67,10 @@ class MovieRatingsStream:
 
     def _upsert_to_sink(self, df: DataFrame, batch_id: int) -> None:
         output_table = self._config["stream"]["output_table"]
+
+        # Drop duplicates for the microbatch
+        # (cannot do it in `_transform()` since it would apply to the entire unbounded stream)
+        df = df.dropDuplicates(["event_id"])
 
         if Catalog(self._spark_session).tableExists(tableName=output_table):
             (
