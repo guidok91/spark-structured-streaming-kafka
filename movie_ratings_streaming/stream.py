@@ -59,7 +59,6 @@ class MovieRatingsStream:
         (
             df.writeStream.format("iceberg")
             .trigger(processingTime=trigger_processing_time)
-            .option("fanout-enabled", "true")
             .option("checkpointLocation", checkpoint_path)
             .foreachBatch(self._upsert_to_sink)
             .start()
