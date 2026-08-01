@@ -6,17 +6,17 @@ authors = [{ name = "Guido Kosloff Gancedo", email = "guidokosloff@gmail.com" }]
 readme = "README.md"
 requires-python = "~=3.14.0"
 dependencies = [
-    "pyspark~=4.1.2",
+    "pyspark~=4.2.0",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff~=0.15.20",
-    "ty~=0.0.56",
+    "ruff~=0.16.0",
+    "ty~=0.0.64",
     "confluent-kafka[avro, schemaregistry]~=2.15.0",
     "requests~=2.34.2",
     "fastavro~=1.12.2",
-    "pre-commit~=4.6.0",
+    "pre-commit~=4.6.1",
 ]
 
 [build-system]
