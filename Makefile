@@ -1,13 +1,14 @@
 export TZ=UTC
-export UV_VERSION=0.11.26
-export ICEBERG_VERSION=1.11.0
+export UV_VERSION=0.13.5
+export ICEBERG_VERSION=1.12.0
 export SPARK_VERSION=$(shell uv run python -c "from importlib.metadata import version; print(version('pyspark'))")
 export SPARK_ARGS = --master local[*] \
-	--packages org.apache.spark:spark-sql-kafka-0-10_2.13:$(SPARK_VERSION),org.apache.spark:spark-avro_2.13:$(SPARK_VERSION),org.apache.iceberg:iceberg-spark-runtime-4.0_2.13:$(ICEBERG_VERSION) \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.13:$(SPARK_VERSION),org.apache.spark:spark-avro_2.13:$(SPARK_VERSION),org.apache.iceberg:iceberg-spark-runtime-4.1_2.13:$(ICEBERG_VERSION) \
 	--conf spark.sql.defaultCatalog=local \
 	--conf spark.sql.catalog.local=org.apache.iceberg.spark.SparkCatalog \
 	--conf spark.sql.catalog.local.type=hadoop \
-	--conf spark.sql.catalog.local.warehouse=data-lake-dev
+	--conf spark.sql.catalog.local.warehouse=data-lake-dev \
+	--conf spark.io.mode.default=NIO
 
 .PHONY: help
 help:
@@ -57,12 +58,12 @@ kafka-read-test-events: # Read and display local test events.
 	--property schema.registry.url=http://localhost:8081 \
 	--from-beginning
 
-.PHONY:
+.PHONY: pyspark
 pyspark: # Run local pyspark console.
 	uv run pyspark \
 	$(SPARK_ARGS)
 
-.PHONY:
+.PHONY: streaming-app-run
 streaming-app-run: # Run Spark Structured streaming app locally.
 	uv run spark-submit \
 	$(SPARK_ARGS) \
